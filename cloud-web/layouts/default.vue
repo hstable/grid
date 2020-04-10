@@ -63,7 +63,7 @@
     </b-navbar>
 
     <section class="main-content columns">
-      <b-menu class="column is-2 section">
+      <b-menu ref="menu" class="column is-2 section">
         <b-menu-list label="MENU">
           <b-menu-item
             icon="home"
@@ -72,7 +72,7 @@
             tag="nuxt-link"
             exact-active-class="is-exact"
           ></b-menu-item>
-          <b-menu-item icon="eye" expanded>
+          <b-menu-item icon="eye" tag="menuitem">
             <template slot="label" slot-scope="props">
               通道可视化
               <b-icon
@@ -84,6 +84,8 @@
               v-for="company of tree.root"
               :key="company.CompanyID"
               icon="domain"
+              tag="menuitem"
+              :disabled="company._Disabled"
             >
               <template slot="label" slot-scope="props">
                 {{ tree.companyMap[company.CompanyID] }}
@@ -96,6 +98,7 @@
                 v-for="power of company.data"
                 :key="power.PowerID"
                 icon="flash"
+                tag="menuitem"
               >
                 <template slot="label" slot-scope="props">
                   {{ tree.powerMap[power.PowerID] }}
@@ -109,6 +112,7 @@
                   :key="line.ID"
                   :active.sync="line.active"
                   icon="transit-connection-variant"
+                  tag="menuitem"
                 >
                   <template slot="label" slot-scope="props">
                     {{ line.Name }}
@@ -120,9 +124,12 @@
                   <b-menu-item
                     v-for="tower of line.data"
                     :key="tower.ID"
-                    icon="transit-connection-variant"
+                    icon="transmission-tower"
                     :label="tower.Name"
                     :disabled="tower._Disabled"
+                    tag="nuxt-link"
+                    exact-active-class="is-exact"
+                    :to="`/tower/${tower.ID}`"
                   >
                   </b-menu-item>
                 </b-menu-item>
@@ -159,6 +166,22 @@ export default {
     this.setupTree()
   },
   methods: {
+    inactiveAll() {
+      const menu = this.$refs.menu
+      function f(component) {
+        for (const x of component.$children) {
+          if (typeof x.newActive === 'boolean') {
+            if (x.newActive) {
+              x.newActive = false
+              x.newExpanded = false
+            }
+            f(x)
+          }
+        }
+      }
+      f(menu)
+      console.log(menu)
+    },
     handleLineActiveChanged(line) {
       console.log(line.active, line)
       if (line.active) {
@@ -176,127 +199,143 @@ export default {
             line.data = res.data.data.towers
           })
           .catch(() => {
-            line.data = []
+            line.data = [
+              {
+                Name: '加载失败',
+                _Disabled: true
+              }
+            ]
           })
       }
     },
     setupTree() {
       const that = this
-      this.$xhr.getTreeLines().then((res) => {
-        const data = res.data.data.lines
-        const tree = []
-        const companyMap = {}
-        const powerMap = {}
-        data.forEach((x) => {
-          // 建立ID2Company映射
-          if (!(x.CompanyID in companyMap)) {
-            companyMap[x.CompanyID] = x.CompanyName
-          }
-          // 建立ID2Power映射
-          if (!(x.PowerID in powerMap)) {
-            powerMap[x.PowerID] = x.PowerName
-          }
-        })
-        // 建立第一层tree并按CompanyID递增排序
-        for (const cid in companyMap) {
-          tree.push({ CompanyID: parseInt(cid), data: [], ID2Index: {} })
-        }
-        tree.sort((a, b) => {
-          if (a.CompanyID < b.CompanyID) {
-            return -1
-          } else if (a.CompanyID === b.CompanyID) {
-            return 0
-          }
-          return 1
-        })
-        const ID2Index = {}
-        for (const index in tree) {
-          ID2Index[tree[index].CompanyID] = index
-        }
-
-        // 建立第n层tree并按PowerID递增排序
-        function setupTreeLayer(
-          data,
-          layer,
-          sortKeyword,
-          locateVal2Index,
-          locateKeyword,
-          reservedProperties
-        ) {
-          if (!reservedProperties) {
-            reservedProperties = []
-          }
+      this.tree = {
+        root: [{ CompanyID: -1, _Disabled: true }],
+        companyMap: { '-1': 'loading...' }
+      }
+      this.$xhr
+        .getTreeLines()
+        .then((res) => {
+          const data = res.data.data.lines
+          const tree = []
+          const companyMap = {}
+          const powerMap = {}
           data.forEach((x) => {
-            if (
-              !(
-                x[sortKeyword] in
-                layer[locateVal2Index[x[locateKeyword]]].ID2Index
-              )
-            ) {
-              layer[locateVal2Index[x[locateKeyword]]].ID2Index[
-                x[sortKeyword]
-              ] = -1
-              const obj = {
-                [sortKeyword]: x[sortKeyword],
-                data: [],
-                ID2Index: {}
-              }
-              for (const p of reservedProperties) {
-                obj[p] = x[p]
-              }
-              layer[locateVal2Index[x[locateKeyword]]].data.push(obj)
+            // 建立ID2Company映射
+            if (!(x.CompanyID in companyMap)) {
+              companyMap[x.CompanyID] = x.CompanyName
+            }
+            // 建立ID2Power映射
+            if (!(x.PowerID in powerMap)) {
+              powerMap[x.PowerID] = x.PowerName
             }
           })
-          layer.forEach((x) => {
-            x.data.sort((a, b) => {
-              if (a[sortKeyword] < b[sortKeyword]) {
-                return -1
-              } else if (a[sortKeyword] === b[sortKeyword]) {
-                return 0
-              }
-              return 1
-            })
-            for (const index in x.data) {
-              x.ID2Index[x.data[index][sortKeyword]] = parseInt(index)
+          // 建立第一层tree并按CompanyID递增排序
+          for (const cid in companyMap) {
+            tree.push({ CompanyID: parseInt(cid), data: [], ID2Index: {} })
+          }
+          tree.sort((a, b) => {
+            if (a.CompanyID < b.CompanyID) {
+              return -1
+            } else if (a.CompanyID === b.CompanyID) {
+              return 0
             }
+            return 1
           })
-        }
+          const ID2Index = {}
+          for (const index in tree) {
+            ID2Index[tree[index].CompanyID] = index
+          }
 
-        setupTreeLayer(data, tree, 'PowerID', ID2Index, 'CompanyID')
-        tree.forEach((c) => {
-          setupTreeLayer(
-            data.filter((d) => d.CompanyID === c.CompanyID),
-            c.data,
-            'ID',
-            c.ID2Index,
-            'PowerID',
-            ['Name', 'CompanyID', 'CompanyName', 'PowerID', 'PowerName']
-          )
-          c.data.forEach((power) => {
-            power.data.forEach((line) => {
-              let active = false
-              Object.defineProperty(line, 'active', {
-                enumerable: true,
-                configurable: true,
-                set(newValue) {
-                  active = newValue
-                  that.handleLineActiveChanged(line)
-                  return active
-                },
-                get() {
-                  return active
+          // 建立第n层tree并按PowerID递增排序
+          function setupTreeLayer(
+            data,
+            layer,
+            sortKeyword,
+            locateVal2Index,
+            locateKeyword,
+            reservedProperties
+          ) {
+            if (!reservedProperties) {
+              reservedProperties = []
+            }
+            data.forEach((x) => {
+              if (
+                !(
+                  x[sortKeyword] in
+                  layer[locateVal2Index[x[locateKeyword]]].ID2Index
+                )
+              ) {
+                layer[locateVal2Index[x[locateKeyword]]].ID2Index[
+                  x[sortKeyword]
+                ] = -1
+                const obj = {
+                  [sortKeyword]: x[sortKeyword],
+                  data: [],
+                  ID2Index: {}
                 }
+                for (const p of reservedProperties) {
+                  obj[p] = x[p]
+                }
+                layer[locateVal2Index[x[locateKeyword]]].data.push(obj)
+              }
+            })
+            layer.forEach((x) => {
+              x.data.sort((a, b) => {
+                if (a[sortKeyword] < b[sortKeyword]) {
+                  return -1
+                } else if (a[sortKeyword] === b[sortKeyword]) {
+                  return 0
+                }
+                return 1
+              })
+              for (const index in x.data) {
+                x.ID2Index[x.data[index][sortKeyword]] = parseInt(index)
+              }
+            })
+          }
+
+          setupTreeLayer(data, tree, 'PowerID', ID2Index, 'CompanyID')
+          tree.forEach((c) => {
+            setupTreeLayer(
+              data.filter((d) => d.CompanyID === c.CompanyID),
+              c.data,
+              'ID',
+              c.ID2Index,
+              'PowerID',
+              ['Name', 'CompanyID', 'CompanyName', 'PowerID', 'PowerName']
+            )
+            c.data.forEach((power) => {
+              power.data.forEach((line) => {
+                let active = false
+                Object.defineProperty(line, 'active', {
+                  enumerable: true,
+                  configurable: true,
+                  set(newValue) {
+                    active = newValue
+                    that.handleLineActiveChanged(line)
+                    return active
+                  },
+                  get() {
+                    return active
+                  }
+                })
               })
             })
           })
+          this.tree = {
+            root: tree,
+            companyMap,
+            powerMap
+          }
         })
-        console.log(data, tree)
-        this.tree = {
-          root: tree,
-          companyMap,
-          powerMap
-        }
-      })
+        .catch(() => {
+          this.tree = {
+            root: [{ CompanyID: -1, _Disabled: true }],
+            companyMap: { '-1': '加载失败' }
+          }
+        })
     },
     handleClickLogout() {
       this.$buefy.loading.open()
@@ -378,13 +417,24 @@ export default {
 </style>
 
 <style lang="scss">
+menuitem {
+  display: block;
+  cursor: pointer;
+  user-select: none;
+
+  border-radius: 2px;
+  color: #4a4a4a;
+  padding: 0.5em 0.75em;
+  &:hover {
+    background-color: rgba(37, 104, 187, 0.15);
+  }
+}
 .menu-list li ul {
   margin-right: 0 !important;
 }
-
+.menu-list a:hover,
 .menu-list .is-exact {
-  background-color: #2263ab;
-  color: #fff;
+  background-color: rgba(37, 104, 187, 0.15);
 }
 
 html {

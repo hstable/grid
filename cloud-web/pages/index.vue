@@ -32,6 +32,9 @@
 <script>
 export default {
   name: 'HomePage',
-  components: {}
+  components: {},
+  created() {
+    this.$parent.$parent.inactiveAll()
+  }
 }
 </script>
