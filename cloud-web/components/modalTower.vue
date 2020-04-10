@@ -112,12 +112,16 @@ export default {
       const loading = this.$buefy.loading.open()
       let xhr
       if (this.which._) {
-        xhr = this.$xhr.newTower(
-          this.data.Name,
-          this.line.ID,
-          parseInt(this.data.BaseStationID),
-          this.data.Location
-        )
+        xhr = this.$xhr
+          .newTower(
+            this.data.Name,
+            this.line.ID,
+            parseInt(this.data.BaseStationID),
+            this.data.Location
+          )
+          .then(() => {
+            this.line.TowersNum++
+          })
       } else {
         xhr = this.$xhr.modifyTower(
           this.data.ID,

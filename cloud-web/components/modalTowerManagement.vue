@@ -22,12 +22,16 @@
             {{ props.row.Name }}
           </b-table-column>
 
-          <b-table-column field="BaseStationName" label="所属基站" numeric>
+          <b-table-column field="BaseStationName" label="所属基站">
             {{ mapID2BaseStation[props.row.BaseStationID].Name }}
           </b-table-column>
 
-          <b-table-column field="BaseStationIP" label="所属基站IP" numeric>
-            {{ mapID2BaseStation[props.row.BaseStationID].Name }}
+          <b-table-column field="BaseStationIP" label="所属基站IP">
+            {{ mapID2BaseStation[props.row.BaseStationID].IP }}
+          </b-table-column>
+
+          <b-table-column field="DevicesNum" label="设备数量" numeric>
+            {{ props.row.DevicesNum }}
           </b-table-column>
 
           <b-table-column label="操作" width="350">
@@ -182,6 +186,7 @@ export default {
             .delTower(which.ID)
             .then(() => {
               this.loadAsyncData()
+              this.line.TowersNum--
             })
             .catch(() => {
               this.loading = false

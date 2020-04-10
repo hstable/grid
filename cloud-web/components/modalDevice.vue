@@ -102,13 +102,17 @@ export default {
       const loading = this.$buefy.loading.open()
       let xhr
       if (this.which._) {
-        xhr = this.$xhr.newDevice(
-          this.data.Name,
-          parseInt(this.tower.ID),
-          this.data.Manufacture,
-          this.data.ModelName,
-          this.data.SerialNumber
-        )
+        xhr = this.$xhr
+          .newDevice(
+            this.data.Name,
+            parseInt(this.tower.ID),
+            this.data.Manufacture,
+            this.data.ModelName,
+            this.data.SerialNumber
+          )
+          .then(() => {
+            this.tower.DevicesNum++
+          })
       } else {
         xhr = this.$xhr.modifyLine(
           this.data.ID,

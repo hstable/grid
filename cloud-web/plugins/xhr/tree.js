@@ -9,6 +9,12 @@ export default function({ $axios }) {
       method: 'get'
     })
   }
+  function getTreeTowers(lineID) {
+    return pack({
+      url: apiRoot + `/tree/line/${lineID}/towers`,
+      method: 'get'
+    })
+  }
 
-  return { getTreeLines }
+  return { getTreeLines, getTreeTowers }
 }

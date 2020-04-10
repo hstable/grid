@@ -8,14 +8,14 @@ import (
 
 func GetLines(ctx *gin.Context) {
 	type Result struct {
-		ID          uint   `json:"id"`
-		Name        string `json:"name"`
-		CompanyID   uint   `json:"companyID"`
-		CompanyName string `json:"companyName"`
-		PowerID     uint   `json:"powerID"`
-		PowerName   string `json:"powerName"`
+		ID          uint   `gorm:"column:id"`
+		Name        string `gorm:"column:name"`
+		CompanyID   uint   `gorm:"column:companyID"`
+		CompanyName string `gorm:"column:companyName"`
+		PowerID     uint   `gorm:"column:powerID"`
+		PowerName   string `gorm:"column:powerName"`
 	}
-	rows, err := dao.DB().Raw("select l.id id,l.name name,c.id companyID,c.name companyName,p.id powerID,p.name powerName from companies c,powers p,`lines` l where l.power_id=p.id and l.company_id=p.id").Rows()
+	rows, err := dao.DB().Raw("select l.id id,l.name name,c.id companyID,c.name companyName,p.id powerID,p.name powerName from companies c,powers p,`lines` l where l.power_id=p.id and l.company_id=c.id").Rows()
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return

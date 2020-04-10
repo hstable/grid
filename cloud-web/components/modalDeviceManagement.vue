@@ -176,6 +176,7 @@ export default {
             .delDevice(which.ID)
             .then(() => {
               this.loadAsyncData()
+              this.tower.DevicesNum--
             })
             .catch(() => {
               this.loading = false

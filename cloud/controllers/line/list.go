@@ -30,14 +30,21 @@ func getParams(ctx *gin.Context) (page, pageSize int, err error) {
 	return
 }
 
-func getLines(page, limit int) (result []*line.Line, total int, err error) {
-	rows, err := dao.DB().Table("lines").Offset((page - 1) * limit).Limit(limit).Rows()
+type listResult struct {
+	line.Line
+	TowersNum int
+}
+
+func getLines(page, limit int) (result []*listResult, total int, err error) {
+	rows, err := dao.DB().Raw("select l.*,count(t.id) towers_num " +
+		"from `lines` l left join towers t on t.line_id=l.id").
+		Group("l.id").Offset((page - 1) * limit).Limit(limit).Rows()
 	if err != nil {
 		return
 	}
-	result = make([]*line.Line, 0)
+	result = make([]*listResult, 0)
 	for rows.Next() {
-		t := new(line.Line)
+		t := new(listResult)
 		err := dao.DB().ScanRows(rows, &t)
 		if err != nil {
 			continue
@@ -86,7 +93,7 @@ func GetLines(ctx *gin.Context) {
 		common.ResponseError(ctx, err)
 		return
 	}
-	users, total, err := getLines(page, pageSize)
+	lines, total, err := getLines(page, pageSize)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
@@ -101,5 +108,5 @@ func GetLines(ctx *gin.Context) {
 		common.ResponseError(ctx, err)
 		return
 	}
-	common.ResponseSuccess(ctx, gin.H{"lines": gin.H{"data": users, "total": total}, "companies": companies, "powers": powers})
+	common.ResponseSuccess(ctx, gin.H{"lines": gin.H{"data": lines, "total": total}, "companies": companies, "powers": powers})
 }

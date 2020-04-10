@@ -30,6 +30,10 @@
             {{ mapPowerID2Name[props.row.PowerID] }}
           </b-table-column>
 
+          <b-table-column field="TowersNum" label="塔杆数量" numeric>
+            {{ props.row.TowersNum }}
+          </b-table-column>
+
           <b-table-column label="操作" width="250">
             <div class="operate-box">
               <b-button

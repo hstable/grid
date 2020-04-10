@@ -17,11 +17,12 @@ type Tower struct {
 
 func GetByLineID(lineID int) (towers []Tower, err error) {
 	db := dao.DB()
-	rows, err := db.Where("line_id=?", lineID).Rows()
+	rows, err := db.Table("towers").Where("line_id=?", lineID).Rows()
 	if err != nil {
 		return
 	}
 	defer rows.Close()
+	towers = make([]Tower, 0)
 	for rows.Next() {
 		var tmp Tower
 		db.ScanRows(rows, &tmp)

@@ -27,14 +27,22 @@ func getParams(ctx *gin.Context) (page, pageSize int, err error) {
 	}
 	return
 }
-func getBaseStations(page, limit int) (result []*baseStation.BaseStation, total int, err error) {
-	rows, err := dao.DB().Table("base_stations").Offset((page - 1) * limit).Limit(limit).Rows()
+
+type listResult struct {
+	baseStation.BaseStation
+	TowersNum int
+}
+
+func getBaseStations(page, limit int) (result []*listResult, total int, err error) {
+	rows, err := dao.DB().Raw("select b.*,count(t.id) towers_num " +
+		"from `base_stations` b left join towers t on t.base_station_id=b.id").
+		Group("b.id").Offset((page - 1) * limit).Limit(limit).Rows()
 	if err != nil {
 		return
 	}
-	result = make([]*baseStation.BaseStation, 0)
+	result = make([]*listResult, 0)
 	for rows.Next() {
-		t := new(baseStation.BaseStation)
+		t := new(listResult)
 		err := dao.DB().ScanRows(rows, &t)
 		if err != nil {
 			continue

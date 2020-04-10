@@ -48,7 +48,7 @@ func getDevices(page, limit int, towerID uint) (result []*device.Device, total i
 		}
 		result = append(result, t)
 	}
-	dao.DB().Table("devices").Count(&total)
+	dao.DB().Table("devices").Where("tower_id=?", towerID).Count(&total)
 	return
 }
 
