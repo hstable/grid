@@ -65,14 +65,14 @@
     <section class="main-content columns">
       <b-menu ref="menu" class="column is-2 section">
         <b-menu-list label="MENU">
-          <b-menu-item
+          <c-menu-item
             icon="home"
             label="系统总览"
             :to="{ name: 'index' }"
             tag="nuxt-link"
             exact-active-class="is-exact"
-          ></b-menu-item>
-          <b-menu-item icon="eye" tag="menuitem">
+          ></c-menu-item>
+          <c-menu-item icon="eye" tag="menuitem" :expanded.sync="tree.expanded">
             <template slot="label" slot-scope="props">
               通道可视化
               <b-icon
@@ -80,9 +80,11 @@
                 :icon="props.expanded ? 'menu-down' : 'menu-up'"
               ></b-icon>
             </template>
-            <b-menu-item
+            <c-menu-item
               v-for="company of tree.root"
               :key="company.CompanyID"
+              :active.sync="company.active"
+              :expanded.sync="company.expanded"
               icon="domain"
               tag="menuitem"
               :disabled="company._Disabled"
@@ -94,9 +96,11 @@
                   :icon="props.expanded ? 'menu-down' : 'menu-up'"
                 ></b-icon>
               </template>
-              <b-menu-item
+              <c-menu-item
                 v-for="power of company.data"
                 :key="power.PowerID"
+                :active.sync="power.active"
+                :expanded.sync="power.expanded"
                 icon="flash"
                 tag="menuitem"
               >
@@ -107,10 +111,11 @@
                     :icon="props.expanded ? 'menu-down' : 'menu-up'"
                   ></b-icon>
                 </template>
-                <b-menu-item
+                <c-menu-item
                   v-for="line of power.data"
                   :key="line.ID"
                   :active.sync="line.active"
+                  :expanded.sync="line.expanded"
                   icon="transit-connection-variant"
                   tag="menuitem"
                 >
@@ -121,7 +126,7 @@
                       :icon="props.expanded ? 'menu-down' : 'menu-up'"
                     ></b-icon>
                   </template>
-                  <b-menu-item
+                  <c-menu-item
                     v-for="tower of line.data"
                     :key="tower.ID"
                     icon="transmission-tower"
@@ -129,17 +134,17 @@
                     :disabled="tower._Disabled"
                     tag="nuxt-link"
                     exact-active-class="is-exact"
-                    :to="`/tower/${tower.ID}`"
+                    :to="`/line/${line.ID}/tower/${tower.ID}`"
                   >
-                  </b-menu-item>
-                </b-menu-item>
-              </b-menu-item>
-            </b-menu-item>
-          </b-menu-item>
+                  </c-menu-item>
+                </c-menu-item>
+              </c-menu-item>
+            </c-menu-item>
+          </c-menu-item>
         </b-menu-list>
       </b-menu>
 
-      <div class="container column is-10">
+      <div class="column is-10">
         <nuxt />
       </div>
     </section>
@@ -153,8 +158,10 @@ import ModalCompanyManagement from '@/components/modalCompanyManagement'
 import ModalPowerManagement from '@/components/modalPowerManagement'
 import ModalLineManagement from '@/components/modalLineManagement'
 import ModalBaseStationManagement from '@/components/modalBaseStationManagement'
+import CMenuItem from '@/components/buefy/MenuItem'
 
 export default {
+  components: { CMenuItem },
   data() {
     return {
       sub: localStorage.sub,
@@ -168,6 +175,7 @@ export default {
   methods: {
     inactiveAll() {
       const menu = this.$refs.menu
+
       function f(component) {
         for (const x of component.$children) {
           if (typeof x.newActive === 'boolean') {
@@ -179,6 +187,7 @@ export default {
           }
         }
       }
+
       f(menu)
       console.log(menu)
     },
@@ -233,7 +242,13 @@ export default {
           })
           // 建立第一层tree并按CompanyID递增排序
           for (const cid in companyMap) {
-            tree.push({ CompanyID: parseInt(cid), data: [], ID2Index: {} })
+            tree.push({
+              CompanyID: parseInt(cid),
+              data: [],
+              ID2Index: {},
+              expanded: false,
+              active: false
+            })
           }
           tree.sort((a, b) => {
             if (a.CompanyID < b.CompanyID) {
@@ -273,7 +288,9 @@ export default {
                 const obj = {
                   [sortKeyword]: x[sortKeyword],
                   data: [],
-                  ID2Index: {}
+                  ID2Index: {},
+                  expanded: false,
+                  active: false
                 }
                 for (const p of reservedProperties) {
                   obj[p] = x[p]
@@ -327,8 +344,11 @@ export default {
           this.tree = {
             root: tree,
             companyMap,
-            powerMap
+            powerMap,
+            expanded: false
           }
+          console.log('!')
+          this.expandMenu()
         })
         .catch(() => {
           this.tree = {
@@ -336,6 +356,46 @@ export default {
             companyMap: { '-1': '加载失败' }
           }
         })
+    },
+    expandMenu() {
+      // eslint-disable-next-line no-unused-vars
+      let { lineID } = this.$route.params
+      if (!lineID) {
+        return
+      }
+      lineID = parseInt(lineID)
+      const tree = this.tree
+      if (
+        tree.root.some((com) => {
+          if (
+            com.data.some((power) => {
+              if (
+                power.data.some((line) => {
+                  console.log(line.ID, lineID)
+                  if (line.ID === lineID) {
+                    line.expanded = true
+                    line.active = true
+                    return true
+                  }
+                  return false
+                })
+              ) {
+                power.expanded = true
+                power.active = true
+                return true
+              }
+              return false
+            })
+          ) {
+            com.expanded = true
+            com.active = true
+            return true
+          }
+          return false
+        })
+      ) {
+        tree.expanded = true
+      }
     },
     handleClickLogout() {
       this.$buefy.loading.open()
@@ -417,6 +477,19 @@ export default {
 </style>
 
 <style lang="scss">
+.carousel.is-overlay {
+  width: 100%;
+  padding: 0;
+
+  .modal-close {
+    &:before,
+    &:after {
+      background-color: white;
+      filter: drop-shadow(0px 0px 3px #000);
+    }
+  }
+}
+
 menuitem {
   display: block;
   cursor: pointer;
@@ -425,13 +498,16 @@ menuitem {
   border-radius: 2px;
   color: #4a4a4a;
   padding: 0.5em 0.75em;
+
   &:hover {
     background-color: rgba(37, 104, 187, 0.15);
   }
 }
+
 .menu-list li ul {
   margin-right: 0 !important;
 }
+
 .menu-list a:hover,
 .menu-list .is-exact {
   background-color: rgba(37, 104, 187, 0.15);
