@@ -175,11 +175,10 @@ export default {
   methods: {
     inactiveAll() {
       const menu = this.$refs.menu
-
       function f(component) {
         for (const x of component.$children) {
           if (typeof x.newActive === 'boolean') {
-            if (x.newActive) {
+            if (x.newActive || x.newExpanded) {
               x.newActive = false
               x.newExpanded = false
             }
@@ -187,9 +186,7 @@ export default {
           }
         }
       }
-
       f(menu)
-      console.log(menu)
     },
     handleLineActiveChanged(line) {
       console.log(line.active, line)
