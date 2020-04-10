@@ -9,13 +9,33 @@ import (
 	"strconv"
 )
 
-func PostTower(ctx *gin.Context) {
+func Delete(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	err = tower.Tower{Model: gorm.Model{ID: uint(id)}}.Delete()
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	common.Response(ctx, common.SUCCESS, nil)
+}
+func Post(ctx *gin.Context) {
 	var t tower.Tower
 	err := ctx.BindJSON(&t)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
 	}
+	_lineID := ctx.Param("lineID")
+	lineID, err := strconv.Atoi(_lineID)
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	t.LineID = lineID
 	t.Model = gorm.Model{}
 	err = t.Insert()
 	if err != nil {
@@ -31,6 +51,12 @@ func Put(ctx *gin.Context) {
 		common.ResponseError(ctx, err)
 		return
 	}
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	t.ID = uint(id)
 	err = t.Update()
 	if err != nil {
 		common.ResponseError(ctx, err)

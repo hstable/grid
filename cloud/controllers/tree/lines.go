@@ -6,7 +6,7 @@ import (
 	"github.com/mzz2017/grip/cloud/dao"
 )
 
-func Get(ctx *gin.Context) {
+func GetLines(ctx *gin.Context) {
 	type Result struct {
 		ID          uint   `json:"id"`
 		Name        string `json:"name"`
@@ -15,7 +15,7 @@ func Get(ctx *gin.Context) {
 		PowerID     uint   `json:"powerID"`
 		PowerName   string `json:"powerName"`
 	}
-	rows, err := dao.DB().Raw("select (l.id id,l.name name,c.id companyID,c.name companyName,p.id powerID,p.name powerName) from companies c,powers p,line l where l.power_id=p.id and l.company_id=p.id").Rows()
+	rows, err := dao.DB().Raw("select l.id id,l.name name,c.id companyID,c.name companyName,p.id powerID,p.name powerName from companies c,powers p,`lines` l where l.power_id=p.id and l.company_id=p.id").Rows()
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return

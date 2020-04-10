@@ -1,11 +1,11 @@
-package line
+package baseStation
 
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/mzz2017/grip/cloud/common"
-	"github.com/mzz2017/grip/cloud/models/line"
+	"github.com/mzz2017/grip/cloud/models/baseStation"
 	"strconv"
 )
 
@@ -15,7 +15,7 @@ func Delete(ctx *gin.Context) {
 		common.ResponseError(ctx, err)
 		return
 	}
-	err = line.Line{Model: gorm.Model{ID: uint(id)}}.Delete()
+	err = baseStation.BaseStation{Model: gorm.Model{ID: uint(id)}}.Delete()
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
@@ -23,14 +23,14 @@ func Delete(ctx *gin.Context) {
 	common.Response(ctx, common.SUCCESS, nil)
 }
 func Post(ctx *gin.Context) {
-	var l line.Line
-	err := ctx.BindJSON(&l)
+	var p baseStation.BaseStation
+	err := ctx.BindJSON(&p)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
 	}
-	l.Model = gorm.Model{}
-	err = l.Insert()
+	p.Model = gorm.Model{}
+	err = p.Insert()
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
@@ -39,7 +39,7 @@ func Post(ctx *gin.Context) {
 }
 
 func Put(ctx *gin.Context) {
-	var t line.Line
+	var t baseStation.BaseStation
 	err := ctx.BindJSON(&t)
 	if err != nil {
 		common.ResponseError(ctx, err)
@@ -59,6 +59,26 @@ func Put(ctx *gin.Context) {
 	common.ResponseSuccess(ctx, nil)
 }
 
+func PutOnline(ctx *gin.Context) {
+	var t baseStation.BaseStation
+	err := ctx.BindJSON(&t)
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	t.ID = uint(id)
+	err = t.UpdateOnline()
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	common.ResponseSuccess(ctx, nil)
+}
 
 func Get(ctx *gin.Context) {
 	_id, ok := ctx.GetQuery("id")
@@ -71,12 +91,12 @@ func Get(ctx *gin.Context) {
 		common.ResponseError(ctx, errors.New("invalid params"))
 		return
 	}
-	o, err := line.Get(uint(id))
+	o, err := baseStation.Get(uint(id))
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
 	}
 	common.ResponseSuccess(ctx, gin.H{
-		"line": o,
+		"baseStation": o,
 	})
 }

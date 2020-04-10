@@ -8,7 +8,7 @@ import (
 
 type Line struct {
 	gorm.Model
-	Name      string `gorm:"not null"`
+	Name      string `gorm:"not null;unique"`
 	PowerID   int
 	CompanyID int
 }
@@ -28,4 +28,7 @@ func Get(id uint) (o Line, err error) {
 	db := dao.DB()
 	err = db.Where("id=?", id).First(&o).Error
 	return
+}
+func (l Line) Delete() error {
+	return dao.DB().Unscoped().Delete(&l).Error
 }

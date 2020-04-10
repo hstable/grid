@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 export default {
   mode: 'spa',
   /*
@@ -27,7 +28,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/xhr', '~/plugins/axios'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -59,7 +60,21 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.plugins.push(
+          new webpack.DefinePlugin({
+            apiRoot: "'http://localhost:8110/api'"
+          })
+        )
+      } else {
+        config.plugins.push(
+          new webpack.DefinePlugin({
+            apiRoot: "'/api'"
+          })
+        )
+      }
+    }
   },
   server: {
     port: 3080

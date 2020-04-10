@@ -11,7 +11,7 @@ type Tower struct {
 	gorm.Model
 	LineID        int               `gorm:"not null"`
 	BaseStationID int               `gorm:"not null"`
-	Name          string            `gorm:"not null"`
+	Name          string            `gorm:"not null;unique"`
 	Location      location.Location `gorm:"not null"` //lat,lon
 }
 
@@ -43,4 +43,8 @@ func (t Tower) Update() (err error) {
 }
 func (t Tower) Insert() error {
 	return dao.DB().Model(&Tower{}).Create(&t).Error
+}
+
+func (t Tower) Delete() error {
+	return dao.DB().Unscoped().Delete(&t).Error
 }

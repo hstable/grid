@@ -9,8 +9,8 @@ func TestUser_Count(t *testing.T) {
 
 func TestUser_Delete(t *testing.T) {
 	var test = User{
-		Sub:      "test_username",
-		Password: "test_password",
+		Sub:      "test",
+		Password: "test",
 		Name:     "测试用户",
 		Admin:    true,
 	}
@@ -26,10 +26,11 @@ func TestUser_Delete(t *testing.T) {
 
 func TestUser_Insert(t *testing.T) {
 	var test = User{
-		Sub:      "test10",
-		Password: "test10",
-		Name:     "专家10",
-		Admin:    true,
+		Sub:       "test",
+		Password:  "test",
+		Name:      "测试管理员",
+		CompanyID: 0,
+		Admin:     true,
 	}
 	test.Delete()
 	err := test.Insert()

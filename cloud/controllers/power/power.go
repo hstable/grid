@@ -9,7 +9,20 @@ import (
 	"strconv"
 )
 
-func PostPower(ctx *gin.Context) {
+func Delete(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	err = power.Power{Model: gorm.Model{ID: uint(id)}}.Delete()
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	common.Response(ctx, common.SUCCESS, nil)
+}
+func Post(ctx *gin.Context) {
 	var p power.Power
 	err := ctx.BindJSON(&p)
 	if err != nil {
@@ -32,6 +45,12 @@ func Put(ctx *gin.Context) {
 		common.ResponseError(ctx, err)
 		return
 	}
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		common.ResponseError(ctx, err)
+		return
+	}
+	t.ID = uint(id)
 	err = t.Update()
 	if err != nil {
 		common.ResponseError(ctx, err)

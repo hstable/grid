@@ -8,7 +8,7 @@ import (
 
 type Company struct {
 	gorm.Model
-	Name string `gorm:"not null"`
+	Name string `gorm:"not null;unique"`
 }
 
 func (c Company) Insert() error {
@@ -27,4 +27,7 @@ func Get(id uint) (o Company, err error) {
 	db := dao.DB()
 	err = db.Where("id=?", id).First(&o).Error
 	return
+}
+func (c Company) Delete() error {
+	return dao.DB().Unscoped().Delete(&c).Error
 }

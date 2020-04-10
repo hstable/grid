@@ -4,13 +4,19 @@
 // Set your colors
 $green: $success;
 $green-invert: findColorInvert($green);
-$primary: $warning;
+$primary: #2568bb;
 $primary-invert: findColorInvert($primary);
+$second: rgb(135, 80, 190);
+$second-invert: findColorInvert($primary);
 $twitter: #4099FF;
 $twitter-invert: findColorInvert($twitter);
-$warning: #ff845e;
+$info: #4497a5;
+$info-invert: findColorInvert($info);
+$success: #506da4;
+$success-invert: findColorInvert($success);
+$warning: #dc8e47;
 $warning-invert: findColorInvert($warning);
-$danger: #ff2551;
+$danger: rgba(255, 69, 58, 0.73);
 $danger-invert: findColorInvert($danger);
 
 //$warning: #dc8e47;
@@ -31,6 +37,7 @@ $colors: (
         "light": ($light, $light-invert),
         "dark": ($dark, $dark-invert),
         "primary": ($primary, $primary-invert),
+        "second": ($second, $second-invert),
         "info": ($info, $info-invert),
         "success": ($success, $success-invert),
         "warning": ($warning, $warning-invert),
