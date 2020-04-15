@@ -41,8 +41,8 @@ func init() {
 	{
 		//只有管理员可以使用的接口
 		adminGroup.GET("tree/lines", tree.GetLines)
-		adminGroup.GET("tree/line/:id/towers", tree.GetTowers)
-		adminGroup.GET("tree/tower/:id/images", tree.GetImages)
+		adminGroup.GET("tree/line/:lineID/towers", tree.GetTowers)
+		adminGroup.GET("tree/tower/:towerID/images", tree.GetImages)
 
 		adminGroup.GET("users", user.GetUsers)
 		adminGroup.POST("user", user.PostUser)
@@ -81,7 +81,7 @@ func init() {
 		adminGroup.PUT("device/:id/disabled", device.PutDisabled)
 		adminGroup.DELETE("device/:id", device.Delete)
 
-		adminGroup.GET("marks/tower/:id", tower.GetMarks)
+		adminGroup.GET("marks/tower/:id", tower.GetMarksThisMonth)
 		adminGroup.GET("visualization/locations", visualization.GetLocations)
 		adminGroup.GET("visualization/powerCounts", visualization.GetPowerCounts)
 		adminGroup.GET("visualization/companyDevices", visualization.GetCompanyDevices)

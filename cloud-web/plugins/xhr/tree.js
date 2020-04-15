@@ -15,6 +15,16 @@ export default function({ $axios }) {
       method: 'get'
     })
   }
+  function getTreeTowerImages(after, limit, towerID) {
+    return pack({
+      url: apiRoot + `/tree/tower/${towerID}/images`,
+      method: 'get',
+      params: {
+        after,
+        limit
+      }
+    })
+  }
 
-  return { getTreeLines, getTreeTowers }
+  return { getTreeLines, getTreeTowers, getTreeTowerImages }
 }

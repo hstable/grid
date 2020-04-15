@@ -9,8 +9,8 @@ import (
 type Image struct {
 	gorm.Model
 	DeviceID int     `gorm:"not null"`
-	Mark     *string `gorm:"null" json:"omitempty"`
-	Annotate *string `gorm:"null" json:"omitempty"`
+	Mark     *string `gorm:"null" json:"Mark,omitempty"`
+	Annotate *string `gorm:"null" json:"Annotate,omitempty"`
 	Filename string  `gorm:"not null;unique"`
 }
 
@@ -26,7 +26,7 @@ func GetByFilename(fname string) (img Image, err error) {
 
 func GetByTowerIDAfter(towerID int, after int, limit int) (imgs []Image, err error) {
 	db := dao.DB()
-	rows, err := db.Where("tower_id=? and id>after", towerID, after).Limit(limit).Rows()
+	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id>?", towerID, after).Limit(limit).Rows()
 	if err != nil {
 		return
 	}

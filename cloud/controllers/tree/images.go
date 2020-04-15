@@ -8,13 +8,13 @@ import (
 	"strconv"
 )
 
-func getParams(ctx *gin.Context) (id, after, limit int, err error) {
-	_id := ctx.Param("id")
+func getParams(ctx *gin.Context) (towerID, after, limit int, err error) {
+	_towerID := ctx.Param("towerID")
 	_after := ctx.DefaultQuery("after", "0")
 	_limit := ctx.DefaultQuery("limit", "4")
-	id, err = strconv.Atoi(_id)
-	if _id == "" || err != nil {
-		err = errors.New("invalid id")
+	towerID, err = strconv.Atoi(_towerID)
+	if _towerID == "" || err != nil {
+		err = errors.New("invalid towerID")
 		return
 	}
 	after, err = strconv.Atoi(_after)
@@ -31,12 +31,12 @@ func getParams(ctx *gin.Context) (id, after, limit int, err error) {
 }
 
 func GetImages(ctx *gin.Context) {
-	id, after, limit, err := getParams(ctx)
+	towerID, after, limit, err := getParams(ctx)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
 	}
-	t, err := image.GetByTowerIDAfter(id, after, limit)
+	t, err := image.GetByTowerIDAfter(towerID, after, limit)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return

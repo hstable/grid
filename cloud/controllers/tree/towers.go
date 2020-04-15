@@ -9,13 +9,13 @@ import (
 )
 
 func GetTowers(ctx *gin.Context) {
-	_id := ctx.Param("id")
-	id, err := strconv.Atoi(_id)
-	if _id == "" || err != nil {
-		common.ResponseError(ctx, errors.New("invalid id"))
+	_lineID := ctx.Param("lineID")
+	lineID, err := strconv.Atoi(_lineID)
+	if _lineID == "" || err != nil {
+		common.ResponseError(ctx, errors.New("invalid lineID"))
 		return
 	}
-	t, err := tower.GetByLineID(id)
+	t, err := tower.GetByLineID(lineID)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
