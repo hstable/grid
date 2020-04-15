@@ -18,6 +18,10 @@ $warning: #dc8e47;
 $warning-invert: findColorInvert($warning);
 $danger: rgba(255, 69, 58, 0.73);
 $danger-invert: findColorInvert($danger);
+$red: rgba(255, 0, 0, 0.73);
+$red-invert: findColorInvert($red);
+$yellow: rgb(255, 200, 0);
+$yellow-invert: findColorInvert($yellow);
 
 //$warning: #dc8e47;
 //$warning-invert: findColorInvert($warning);
@@ -44,6 +48,8 @@ $colors: (
         "danger": ($danger, $danger-invert),
         "twitter": ($twitter, $twitter-invert),
         "green": ($green, $green-invert),
+        "red": ($red, $red-invert),
+        "yellow": ($yellow, $yellow-invert),
         "delete": ($delete, $delete-invert)
 );
 

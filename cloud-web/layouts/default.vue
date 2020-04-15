@@ -2,7 +2,7 @@
   <div>
     <b-navbar ref="navs" fixed-top shadow type="is-light">
       <template slot="brand">
-        <b-navbar-item href="/" style="padding: 0">
+        <b-navbar-item tag="nuxt-link" to="/" style="padding: 0">
           <img src="~assets/logo.png" alt="陕西电网" class="logo no-select" />
         </b-navbar-item>
       </template>
@@ -22,11 +22,11 @@
           </b-navbar-item>
           <b-navbar-item @click="handleClickBaseStationManagement">
             <b-icon icon="transmission-tower" size="is-small"></b-icon>
-            <span>基站管理</span>
+            <span>边缘节点管理</span>
           </b-navbar-item>
           <b-navbar-item @click="handleClickPowerManagement">
             <b-icon icon="flash" size="is-small"></b-icon>
-            <span>电力管理</span>
+            <span>电力级别管理</span>
           </b-navbar-item>
           <b-navbar-item @click="handleClickLineManagement">
             <b-icon icon="transit-connection-variant" size="is-small"></b-icon>
@@ -62,8 +62,8 @@
       </template>
     </b-navbar>
 
-    <section class="main-content columns">
-      <b-menu ref="menu" class="column is-2 section">
+    <section class="main-content columns" style="margin-bottom: 0">
+      <b-menu ref="menu" class="column section">
         <b-menu-list label="MENU">
           <c-menu-item
             icon="home"
@@ -144,9 +144,7 @@
         </b-menu-list>
       </b-menu>
 
-      <div class="column is-10">
-        <nuxt />
-      </div>
+      <nuxt class="column is-10" />
     </section>
     <div id="login"></div>
   </div>
@@ -189,7 +187,6 @@ export default {
       f(menu)
     },
     handleLineActiveChanged(line) {
-      console.log(line.active, line)
       if (line.active) {
         if (!line.data.length) {
           line.data = [
@@ -344,7 +341,6 @@ export default {
             powerMap,
             expanded: false
           }
-          console.log('!')
           this.expandMenu()
         })
         .catch(() => {
@@ -368,7 +364,6 @@ export default {
             com.data.some((power) => {
               if (
                 power.data.some((line) => {
-                  console.log(line.ID, lineID)
                   if (line.ID === lineID) {
                     line.expanded = true
                     line.active = true
@@ -474,8 +469,11 @@ export default {
 </style>
 
 <style lang="scss">
+.navbar-dropdown {
+  border-top: none;
+}
 .carousel.is-overlay {
-  width: 100%;
+  width: 100% !important;
   padding: 0;
 
   .modal-close {

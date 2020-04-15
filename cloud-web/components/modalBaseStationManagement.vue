@@ -1,7 +1,7 @@
 <template>
   <div class="modal-card" style="width: auto">
     <header class="modal-card-head">
-      <p class="modal-card-title">基站管理</p>
+      <p class="modal-card-title">边缘节点管理</p>
     </header>
     <section class="modal-card-body">
       <b-table
@@ -18,8 +18,12 @@
         @page-change="onPageChange"
       >
         <template slot-scope="props">
-          <b-table-column field="Name" label="基站名称">
+          <b-table-column field="Name" label="边缘节点名称">
             {{ props.row.Name }}
+          </b-table-column>
+
+          <b-table-column field="Location" label="经纬度">
+            {{ props.row.Location | beautifyLocation }}
           </b-table-column>
 
           <b-table-column field="IPAddress" label="IP地址">
@@ -69,7 +73,7 @@
       </b-table>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-primary" @click="handleNew">添加基站</button>
+      <button class="button is-primary" @click="handleNew">添加边缘节点</button>
     </footer>
   </div>
 </template>
@@ -85,6 +89,9 @@ export default {
      */
     truncate(value, length) {
       return value.length > length ? value.substr(0, length) + '...' : value
+    },
+    beautifyLocation(val) {
+      return val.replace(',', ', ')
     }
   },
   data: () => ({

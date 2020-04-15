@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import _pack from './_pack'
 
 export default function({ $axios }) {
@@ -46,5 +47,15 @@ export default function({ $axios }) {
     })
   }
 
-  return { getTowers, modifyTower, newTower, delTower }
+  // example: getTowerMonthMarks(1, "2020-03")
+  function getTowerMonthMarks(ID, date) {
+    date = dayjs(date).format('YYYY-MM')
+    return pack({
+      url: apiRoot + '/marks/tower/' + ID,
+      method: 'get',
+      params: { date }
+    })
+  }
+
+  return { getTowers, modifyTower, newTower, delTower, getTowerMonthMarks }
 }

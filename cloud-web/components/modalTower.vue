@@ -31,7 +31,7 @@
           <b-input
             ref="location"
             v-model="data.Location"
-            pattern="\d+\.\d+,\d+\.\d+"
+            pattern="\d+\.\d+,\s*\d+\.\d+"
             expanded
             required
           ></b-input>
@@ -117,7 +117,7 @@ export default {
             this.data.Name,
             this.line.ID,
             parseInt(this.data.BaseStationID),
-            this.data.Location
+            this.data.Location.replace(/\s/, '')
           )
           .then(() => {
             this.line.TowersNum++
@@ -128,7 +128,7 @@ export default {
           this.data.Name,
           this.line.ID,
           parseInt(this.data.BaseStationID),
-          this.data.Location
+          this.data.Location.replace(/\s/, '')
         )
       }
       xhr

@@ -22,6 +22,10 @@
             {{ props.row.Name }}
           </b-table-column>
 
+          <b-table-column field="Location" label="经纬度">
+            {{ props.row.Location | beautifyLocation }}
+          </b-table-column>
+
           <b-table-column field="BaseStationName" label="所属基站">
             {{ mapID2BaseStation[props.row.BaseStationID].Name }}
           </b-table-column>
@@ -95,6 +99,9 @@ export default {
      */
     truncate(value, length) {
       return value.length > length ? value.substr(0, length) + '...' : value
+    },
+    beautifyLocation(val) {
+      return val.replace(',', ', ')
     }
   },
   props: {

@@ -9,7 +9,8 @@ import (
 type Image struct {
 	gorm.Model
 	DeviceID int     `gorm:"not null"`
-	Mark     *string `gorm:"null" json:"Mark,omitempty"`
+	Mark     *string `gorm:"null" json:"omitempty"`
+	Annotate *string `gorm:"null" json:"omitempty"`
 	Filename string  `gorm:"not null;unique"`
 }
 

@@ -21,6 +21,8 @@ module.exports = {
   rules: {
   },
   globals: {
-    "apiRoot": true
+    "apiRoot": true,
+    "AMap": true,
+    "AMapUI": true
   }
 }

@@ -2,11 +2,11 @@
   <div class="modal-card" style="max-width: 520px;margin:auto">
     <header class="modal-card-head">
       <p class="modal-card-title">
-        {{ data._ ? '添加基站' : '修改基站信息' }}
+        {{ data._ ? '添加边缘节点' : '修改边缘节点信息' }}
       </p>
     </header>
     <section class="modal-card-body">
-      <b-field label="基站名称">
+      <b-field label="边缘节点名称">
         <b-input ref="name" v-model="data.Name" expanded required></b-input>
       </b-field>
       <b-field label="IPv4地址">
@@ -23,7 +23,7 @@
           <b-input
             ref="location"
             v-model="data.Location"
-            pattern="\d+\.\d+,\d+\.\d+"
+            pattern="\d+\.\d+,\s*\d+\.\d+"
             expanded
             required
           ></b-input>
@@ -96,14 +96,14 @@ export default {
         xhr = this.$xhr.newBaseStation(
           this.data.Name,
           this.data.IP,
-          this.data.Location
+          this.data.Location.replace(/\s/, '')
         )
       } else {
         xhr = this.$xhr.modifyBaseStation(
           this.data.ID,
           this.data.Name,
           this.data.IP,
-          this.data.Location
+          this.data.Location.replace(/\s/, '')
         )
       }
       xhr

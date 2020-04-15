@@ -13,6 +13,7 @@ import (
 	"github.com/mzz2017/grip/cloud/controllers/tower"
 	"github.com/mzz2017/grip/cloud/controllers/tree"
 	"github.com/mzz2017/grip/cloud/controllers/user"
+	"github.com/mzz2017/grip/cloud/controllers/visualization"
 )
 
 var Router *gin.Engine
@@ -33,7 +34,7 @@ func init() {
 	{
 		//无需登录也可使用的接口
 		freeGroup.POST("user/login", user.PostLogin)
-		freeGroup.GET("images/:filename", image.Get)
+		freeGroup.GET("image/:filename", image.Get)
 	}
 	adminGroup := Router.Group("api")
 	adminGroup.Use(common.JWTAuth(true))
@@ -79,6 +80,12 @@ func init() {
 		adminGroup.PUT("device/:id", device.Put)
 		adminGroup.PUT("device/:id/disabled", device.PutDisabled)
 		adminGroup.DELETE("device/:id", device.Delete)
+
+		adminGroup.GET("marks/tower/:id", tower.GetMarks)
+		adminGroup.GET("visualization/locations", visualization.GetLocations)
+		adminGroup.GET("visualization/powerCounts", visualization.GetPowerCounts)
+		adminGroup.GET("visualization/companyDevices", visualization.GetCompanyDevices)
+		adminGroup.GET("visualization/marks", visualization.GetMarks)
 
 	}
 	ordinaryGroup := Router.Group("api")
