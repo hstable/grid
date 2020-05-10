@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/mzz2017/grip/basestation/common"
+	"github.com/mzz2017/grip/basestation/controllers"
 )
 
 var Router *gin.Engine
@@ -23,23 +23,9 @@ func init() {
 	freeGroup := Router.Group("api")
 	{
 		//无需登录也可使用的接口
-		userGroup := freeGroup.Group("user")
-	}
-	Router.GET("images/:hash")
-	adminGroup := Router.Group("api")
-	adminGroup.Use(common.JWTAuth(true))
-	{
-		//只有管理员可以使用的接口
-		userGroup := adminGroup.Group("user")
-		{
-			userGroup.POST("register", user.PostRegister)
-		}
-		imageGroup := adminGroup.Group("image")
-		{
-			imageGroup.GET("list", image.GetList)
-			imageGroup.GET("next", image.GetNext)
-			imageGroup.GET("last", image.GetLast)
-			imageGroup.PUT("mark", image.PutMark)
-		}
+		freeGroup.GET("image/:filename", controllers.GetImage)
+		freeGroup.POST("devices", controllers.PostDevices)
+		freeGroup.GET("device/:ip/newPhoto", controllers.GetNewPhoto)
+		freeGroup.GET("log", controllers.GetLog)
 	}
 }

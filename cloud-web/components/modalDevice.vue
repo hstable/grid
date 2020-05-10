@@ -36,6 +36,74 @@
           required
         ></b-input>
       </b-field>
+
+      <b-field label="Auth">
+        <b-input
+          ref="Auth"
+          v-model="data.Network.Auth"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="IMSI">
+        <b-input
+          ref="IMSI"
+          v-model="data.Network.IMSI"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="Key">
+        <b-input
+          ref="Key"
+          v-model="data.Network.Key"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="OP_Type">
+        <b-input
+          ref="OP_Type"
+          v-model="data.Network.OP_Type"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="OP">
+        <b-input ref="OP" v-model="data.Network.OP" expanded required></b-input>
+      </b-field>
+      <b-field label="AMF">
+        <b-input
+          ref="AMF"
+          v-model="data.Network.AMF"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="SQN">
+        <b-input
+          ref="SQN"
+          v-model="data.Network.SQN"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="QCI">
+        <b-input
+          ref="QCI"
+          v-model="data.Network.QCI"
+          expanded
+          required
+        ></b-input>
+      </b-field>
+      <b-field label="IP_alloc">
+        <b-input
+          ref="IP_alloc"
+          v-model="data.Network.IP_alloc"
+          expanded
+          required
+        ></b-input>
+      </b-field>
     </section>
     <footer class="modal-card-foot flex-end">
       <button class="button" type="button" @click="$parent.close()">
@@ -60,6 +128,18 @@ export default {
           Name: '',
           CompanyID: 0,
           PowerID: 0,
+          Network: {
+            Name: '',
+            Auth: '',
+            IMSI: '',
+            Key: '',
+            OP_Type: '',
+            OP: '',
+            AMF: '',
+            SQN: '',
+            QCI: '',
+            IP_alloc: ''
+          },
           _: true
         }
       }
@@ -108,19 +188,21 @@ export default {
             parseInt(this.tower.ID),
             this.data.Manufacture,
             this.data.ModelName,
-            this.data.SerialNumber
+            this.data.SerialNumber,
+            this.data.Network
           )
           .then(() => {
             this.tower.DevicesNum++
           })
       } else {
-        xhr = this.$xhr.modifyLine(
+        xhr = this.$xhr.modifyDevice(
           this.data.ID,
           this.data.Name,
           parseInt(this.tower.ID),
           this.data.Manufacture,
           this.data.ModelName,
-          this.data.SerialNumber
+          this.data.SerialNumber,
+          this.data.Network
         )
       }
       xhr

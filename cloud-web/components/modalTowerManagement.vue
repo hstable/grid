@@ -45,7 +45,7 @@
                 icon-left="map-marker"
                 outlined
                 type="is-second"
-                @click="handleDeviceManagement(props.row)"
+                @click="handleClickLocation(props.row)"
               >
                 查看位置
               </b-button>
@@ -84,15 +84,20 @@
     <footer class="modal-card-foot">
       <button class="button is-primary" @click="handleNew">添加塔杆</button>
     </footer>
+    <b-modal :active.sync="showMap">
+      <modal-map v-if="showMap" :location="locationLatLng"></modal-map>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import ModalMap from './modalMap'
 import ModalTower from '@/components/modalTower'
 import ModalDeviceManagement from '@/components/modalDeviceManagement'
 
 export default {
   name: 'ModalTowerManagement',
+  components: { ModalMap },
   filters: {
     /**
      * Filter to truncate string, accepts a length parameter
@@ -116,7 +121,9 @@ export default {
     loading: false,
     page: 1,
     perPage: 20,
-    mapID2BaseStation: {}
+    mapID2BaseStation: {},
+    showMap: false,
+    locationLatLng: null
   }),
   mounted() {
     this.loadAsyncData()
@@ -212,16 +219,13 @@ export default {
           tower: row
         }
       })
+    },
+    handleClickLocation(which) {
+      this.showMap = true
+      this.locationLatLng = which.Location.split(',')
     }
   }
 }
 </script>
 
-<style lang="scss">
-.modal-close {
-  &::before,
-  &::after {
-    background-color: black;
-  }
-}
-</style>
+<style lang="scss"></style>

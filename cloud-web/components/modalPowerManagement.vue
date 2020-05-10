@@ -148,11 +148,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.modal-close {
-  &::before,
-  &::after {
-    background-color: black;
-  }
-}
-</style>
+<style lang="scss"></style>

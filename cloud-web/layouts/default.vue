@@ -7,32 +7,32 @@
         </b-navbar-item>
       </template>
       <template slot="end">
-        <b-navbar-dropdown hoverable arrowless>
-          <template slot="label">
-            <b-icon icon="cog-outline" size="is-small"></b-icon>
-            <span>系统配置</span>
-          </template>
-          <b-navbar-item @click="handleClickUserManagement">
-            <b-icon icon="account" size="is-small"></b-icon>
-            <span>用户管理</span>
-          </b-navbar-item>
-          <b-navbar-item @click="handleClickCompanyManagement">
-            <b-icon icon="domain" size="is-small"></b-icon>
-            <span>公司管理</span>
-          </b-navbar-item>
-          <b-navbar-item @click="handleClickBaseStationManagement">
-            <b-icon icon="transmission-tower" size="is-small"></b-icon>
-            <span>边缘节点管理</span>
-          </b-navbar-item>
-          <b-navbar-item @click="handleClickPowerManagement">
-            <b-icon icon="flash" size="is-small"></b-icon>
-            <span>电力级别管理</span>
-          </b-navbar-item>
-          <b-navbar-item @click="handleClickLineManagement">
-            <b-icon icon="transit-connection-variant" size="is-small"></b-icon>
-            <span>线路管理</span>
-          </b-navbar-item>
-        </b-navbar-dropdown>
+        <!--        <b-navbar-dropdown hoverable arrowless>-->
+        <!--          <template slot="label">-->
+        <!--            <b-icon icon="cog-outline" size="is-small"></b-icon>-->
+        <!--            <span>系统配置</span>-->
+        <!--          </template>-->
+        <!--          <b-navbar-item @click="handleClickUserManagement">-->
+        <!--            <b-icon icon="account" size="is-small"></b-icon>-->
+        <!--            <span>用户管理</span>-->
+        <!--          </b-navbar-item>-->
+        <!--          <b-navbar-item @click="handleClickCompanyManagement">-->
+        <!--            <b-icon icon="domain" size="is-small"></b-icon>-->
+        <!--            <span>公司管理</span>-->
+        <!--          </b-navbar-item>-->
+        <!--          <b-navbar-item @click="handleClickBaseStationManagement">-->
+        <!--            <b-icon icon="transmission-tower" size="is-small"></b-icon>-->
+        <!--            <span>边缘节点管理</span>-->
+        <!--          </b-navbar-item>-->
+        <!--          <b-navbar-item @click="handleClickPowerManagement">-->
+        <!--            <b-icon icon="flash" size="is-small"></b-icon>-->
+        <!--            <span>电力级别管理</span>-->
+        <!--          </b-navbar-item>-->
+        <!--          <b-navbar-item @click="handleClickLineManagement">-->
+        <!--            <b-icon icon="transit-connection-variant" size="is-small"></b-icon>-->
+        <!--            <span>线路管理</span>-->
+        <!--          </b-navbar-item>-->
+        <!--        </b-navbar-dropdown>-->
         <b-dropdown
           position="is-bottom-left"
           aria-role="menu"
@@ -141,6 +141,26 @@
               </c-menu-item>
             </c-menu-item>
           </c-menu-item>
+          <b-navbar-item @click="handleClickUserManagement">
+            <b-icon icon="account" size="is-small"></b-icon>
+            <span>用户管理</span>
+          </b-navbar-item>
+          <b-navbar-item @click="handleClickCompanyManagement">
+            <b-icon icon="domain" size="is-small"></b-icon>
+            <span>公司管理</span>
+          </b-navbar-item>
+          <b-navbar-item @click="handleClickBaseStationManagement">
+            <b-icon icon="transmission-tower" size="is-small"></b-icon>
+            <span>边缘节点管理</span>
+          </b-navbar-item>
+          <b-navbar-item @click="handleClickPowerManagement">
+            <b-icon icon="flash" size="is-small"></b-icon>
+            <span>电力级别管理</span>
+          </b-navbar-item>
+          <b-navbar-item @click="handleClickLineManagement">
+            <b-icon icon="transit-connection-variant" size="is-small"></b-icon>
+            <span>线路管理</span>
+          </b-navbar-item>
         </b-menu-list>
       </b-menu>
 

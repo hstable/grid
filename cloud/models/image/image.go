@@ -3,7 +3,13 @@ package image
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
+	"github.com/mzz2017/grip/cloud/common"
+	"github.com/mzz2017/grip/cloud/common/crypto"
+	"github.com/mzz2017/grip/cloud/config"
 	"github.com/mzz2017/grip/cloud/dao"
+	"io/ioutil"
+	"path"
+	"path/filepath"
 )
 
 type Image struct {
@@ -39,7 +45,22 @@ func GetByTowerIDAfter(towerID int, after int, limit int) (imgs []Image, err err
 	return
 }
 
-func (image Image) Insert() error {
+func writeToFile(image []byte) (fpath string, err error) {
+	suffix := common.GetImageSuffix(image)
+	if suffix == "" {
+		return "", errors.New("unrecognized image format")
+	}
+	fname := crypto.HashWithSalt(image, config.Get().Secret) + suffix
+	fpath = path.Join(config.Get().AssetDir, fname)
+	return fpath, ioutil.WriteFile(fpath, image, 0700)
+}
+
+func (image Image) Insert(b []byte) error {
+	fpath, err := writeToFile(b)
+	if err != nil {
+		return err
+	}
+	image.Filename = filepath.Base(fpath)
 	return dao.DB().Model(&Image{}).Create(&image).Error
 }
 
@@ -47,9 +68,9 @@ func (image Image) FirstNotMarkAfter() (u Image, err error) {
 	db := dao.DB().Begin()
 	defer func() {
 		if err != nil {
-			db.Commit()
-		} else {
 			db.Rollback()
+		} else {
+			db.Commit()
 		}
 	}()
 	err = db.Model(&Image{}).Where("id>? and mark is null", image.ID).First(&u).Error
@@ -63,9 +84,9 @@ func (image Image) FirstAfter() (u Image, err error) {
 	db := dao.DB().Begin()
 	defer func() {
 		if err != nil {
-			db.Commit()
-		} else {
 			db.Rollback()
+		} else {
+			db.Commit()
 		}
 	}()
 	err = db.Model(&Image{}).Where("id>?", image.ID).First(&u).Error

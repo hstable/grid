@@ -28,7 +28,7 @@
             required
           ></b-input>
           <p class="control">
-            <button class="button is-primary">定位</button>
+            <button class="button is-primary" @click="locate">定位</button>
           </p>
         </b-field>
       </b-field>
@@ -41,12 +41,20 @@
         确定
       </button>
     </footer>
+    <b-modal :active.sync="showLocate">
+      <modal-locate
+        v-if="showLocate"
+        @complete="handleLocateComplete"
+      ></modal-locate>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import ModalLocate from './modalLocate'
 export default {
   name: 'ModalUser',
+  components: { ModalLocate },
   props: {
     which: {
       type: Object,
@@ -62,7 +70,7 @@ export default {
       }
     }
   },
-  data: () => ({ data: null }),
+  data: () => ({ data: null, showLocate: false }),
   created() {
     this.data = Object.assign({}, this.which)
   },
@@ -114,6 +122,13 @@ export default {
         .finally(() => {
           loading.close()
         })
+    },
+    locate() {
+      this.showLocate = true
+    },
+    handleLocateComplete(location) {
+      this.data.Location = location.Q + ',' + location.R
+      this.showLocate = false
     }
   }
 }

@@ -1,4 +1,6 @@
+import { ToastProgrammatic } from 'buefy'
 import _pack from './_pack'
+import { toInt } from '@/assets/js/utils'
 
 export default function({ $axios }) {
   const pack = _pack({ $axios })
@@ -20,31 +22,41 @@ export default function({ $axios }) {
     TowerID,
     Manufacture,
     ModelName,
-    SerialNumber
+    SerialNumber,
+    Network
   ) {
     return pack({
       url: apiRoot + '/device/' + ID,
       method: 'put',
       data: {
         Name,
-        TowerID,
+        TowerID: toInt(TowerID),
         Manufacture,
         ModelName,
-        SerialNumber
+        SerialNumber,
+        Network
       }
     })
   }
 
-  function newDevice(Name, TowerID, Manufacture, ModelName, SerialNumber) {
+  function newDevice(
+    Name,
+    TowerID,
+    Manufacture,
+    ModelName,
+    SerialNumber,
+    Network
+  ) {
     return pack({
       url: apiRoot + `/tower/${TowerID}/device`,
       method: 'post',
       data: {
         Name,
-        TowerID,
+        TowerID: toInt(TowerID),
         Manufacture,
         ModelName,
-        SerialNumber
+        SerialNumber,
+        Network
       }
     })
   }
@@ -66,5 +78,55 @@ export default function({ $axios }) {
     })
   }
 
-  return { getDevices, modifyDevice, newDevice, delDevice, changeDeviceStatus }
+  function newPhoto(deviceID) {
+    return new Promise((resolve, reject) => {
+      $axios({
+        url: apiRoot + `/device/${deviceID}/newPhoto`,
+        method: 'get'
+      })
+        .then((res) => {
+          resolve(res)
+        })
+        .catch((err) => {
+          function notsuretip() {
+            ToastProgrammatic.open({
+              message: '请求服务器时发生网络错误',
+              type: 'is-warning',
+              position: 'is-top',
+              queue: false,
+              duration: 5000
+            })
+          }
+          if (!err.response) {
+            notsuretip()
+          } else {
+            switch (err.response.status) {
+              case 401:
+                break
+              case 400:
+                ToastProgrammatic.open({
+                  message: err.response.data,
+                  type: 'is-warning',
+                  position: 'is-top',
+                  queue: false,
+                  duration: 5000
+                })
+                break
+              default:
+                notsuretip()
+            }
+          }
+          reject(err)
+        })
+    })
+  }
+
+  return {
+    getDevices,
+    modifyDevice,
+    newDevice,
+    delDevice,
+    changeDeviceStatus,
+    newPhoto
+  }
 }

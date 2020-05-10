@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// eslint-disable-next-line no-unused-vars
 import { ToastProgrammatic, Modal } from 'buefy'
 import ModalLogin from '@/components/modalLogin'
 export default function({ $axios, redirect }) {
@@ -41,12 +42,13 @@ export default function({ $axios, redirect }) {
         }
       }).$mount('#login')
     } else {
-      ToastProgrammatic.open({
-        message: err.message,
-        type: 'is-warning',
-        position: 'is-top',
-        duration: 5000
-      })
+      // ToastProgrammatic.open({
+      //   message: err.message,
+      //   type: 'is-warning',
+      //   position: 'is-top',
+      //   duration: 5000,
+      //   queue: false
+      // })
     }
   })
 }

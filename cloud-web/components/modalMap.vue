@@ -1,110 +1,24 @@
 <template>
-  <section style="padding:1.5em 0 0;position: relative;left:-1.25em">
-    <div class="tile is-ancestor" style="margin-bottom: 0">
-      <div class="tile is-vertical">
-        <AlertPie></AlertPie>
-        <PowerBar :input="PowerCounts"></PowerBar>
-      </div>
-      <div class="tile is-7 is-vertical is-parent">
-        <div id="map-container" style="height:100%;width:100%"></div>
-      </div>
-      <div class="tile is-vertical">
-        <MarkPie></MarkPie>
-        <div class="tile is-child" style="position: relative">
-          <b-table :data="data" :columns="columns"></b-table>
-          <p
-            v-show="!data.length"
-            style="position: absolute;height:100%;width:100%;text-align: center"
-          >
-            暂无数据
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column" style="padding: 0">
-        <PowerWaterfall :input="PowerCounts"></PowerWaterfall>
-      </div>
-      <div class="column is-7" style="padding: 0">
-        <BlueBlockGraph></BlueBlockGraph>
-      </div>
-      <div
-        class="column"
-        style="padding-left: 0;padding-top: 0;padding-bottom: 0"
-      >
-        <DeviceGroupedBar></DeviceGroupedBar>
-      </div>
-    </div>
-  </section>
+  <div id="location-container" style="height:80vh;width:100%"></div>
 </template>
 
 <script>
-import PowerWaterfall from '../components/viser/PowerWaterfall'
-import AlertPie from '../components/viser/AlertPie'
-import DeviceGroupedBar from '../components/viser/DeviceGroupedBar'
-import PowerBar from '../components/viser/PowerBar'
-import MarkPie from '../components/viser/MarkPie'
-import BlueBlockGraph from '@/components/viser/BlueBlockGraph'
 import ModalLogEdgeServer from '@/components/modalLogEdgeServer'
 export default {
-  name: 'HomePage',
-  components: {
-    MarkPie,
-    PowerBar,
-    DeviceGroupedBar,
-    AlertPie,
-    PowerWaterfall,
-    BlueBlockGraph
-  },
-  data: () => ({
-    PowerCounts: [],
-    data: [],
-    columns: [
-      {
-        field: 'Name',
-        label: '塔杆名称',
-        centered: true
-      },
-      {
-        field: 'CreatedTime',
-        label: '巡视时间',
-        centered: true
-      },
-      {
-        field: 'Annotate',
-        label: '告警事由',
-        centered: true
-      }
-    ]
-  }),
-  created() {
-    this.$parent.$parent.inactiveAll()
+  name: 'ModalMap',
+  props: {
+    location: { type: Array, default: () => [108.939621, 34.343147] }
   },
   mounted() {
     this.initMap()
-    this.loadPowerCounts()
   },
   methods: {
-    loadPowerCounts() {
-      this.$xhr.getPowerCounts().then((res) => {
-        const data = res.data.data
-        const sum = {
-          PowerName: '塔杆总数',
-          Count: 0
-        }
-        data.result.forEach((x) => {
-          sum.Count += x.Count
-        })
-        data.result.push(sum)
-        this.PowerCounts = data.result
-      })
-    },
     initMap() {
       const that = this
-      const map = new AMap.Map('map-container', {
+      const map = new AMap.Map('location-container', {
         mapStyle: 'amap://styles/4261c8dec313b784c0933324313428a8666'
       })
-      map.setZoomAndCenter(8, [108.939621, 34.343147])
+      map.setZoomAndCenter(12, this.location)
       /* 绘制小地图的各个省份的分界线 */
       AMapUI.loadUI(['geo/DistrictExplorer'], function(DistrictExplorer) {
         // 创建一个实例
@@ -128,6 +42,7 @@ export default {
           })
         })
       })
+
       this.$xhr.getLocations().then((res) => {
         const data = res.data.data
         const baseStations = data.baseStations.map((x) => {
@@ -137,7 +52,7 @@ export default {
             title: '边缘节点: ' + x.Name,
             x,
             icon: '/tower1.png',
-            offset: new AMap.Pixel(-10, -15)
+            offset: new AMap.Pixel(-8, -15)
           })
           m.on(
             'click',
@@ -162,7 +77,7 @@ export default {
             position: new AMap.LngLat(lng, lat),
             title: x.Name,
             icon: '/tower0.png',
-            offset: new AMap.Pixel(-10, -15)
+            offset: new AMap.Pixel(-8, -15)
           })
         })
         // 将创建的点标记添加到已有的地图实例：
@@ -186,14 +101,16 @@ export default {
             })
           )
         }
+        // 创建标记
+        map.add(
+          new AMap.Marker({
+            position: new AMap.LngLat(...this.location)
+          })
+        )
       })
     }
   }
 }
 </script>
 
-<style lang="scss">
-.amap-logo {
-  z-index: inherit !important;
-}
-</style>
+<style lang="scss"></style>

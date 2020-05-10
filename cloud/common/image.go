@@ -14,10 +14,10 @@ func IsImage(img []byte) bool {
 func GetImageSuffix(img []byte) string {
 	var h [2]byte
 	copy(h[:], img[:2])
-	//255216是jpg;7173是gif;6677是BMP,13780是PNG
+	//255216是jpeg;7173是gif;6677是BMP,13780是PNG
 	switch h {
 	case [2]byte{255, 216}:
-		return ".jpg"
+		return ".jpeg"
 	case [2]byte{71, 73}:
 		return ".gif"
 	case [2]byte{66, 77}:

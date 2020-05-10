@@ -1,6 +1,7 @@
 package device
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/mzz2017/grip/cloud/common"
@@ -40,9 +41,24 @@ func getDevices(page, limit int, towerID uint) (result []*device.Device, total i
 		return
 	}
 	result = make([]*device.Device, 0)
+	scan := func(rows *sql.Rows) (t *device.Device, err error) {
+		af := dao.DB().Begin()
+		t = new(device.Device)
+		defer func() {
+			if err != nil {
+				af.Rollback()
+			} else {
+				af.Commit()
+			}
+		}()
+		err = af.ScanRows(rows, t)
+		if err != nil {
+			return
+		}
+		return t, af.Where("id=?", t.NetworkID).First(&t.Network).Error
+	}
 	for rows.Next() {
-		t := new(device.Device)
-		err := dao.DB().ScanRows(rows, &t)
+		t, err := scan(rows)
 		if err != nil {
 			continue
 		}

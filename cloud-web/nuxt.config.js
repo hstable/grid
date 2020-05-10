@@ -33,7 +33,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['assets/scss/buefy.scss'],
+  css: ['assets/scss/buefy.scss', 'assets/scss/reset.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -52,7 +52,15 @@ export default {
    */
   modules: [
     // Doc: https://buefy.github.io/#/documentation
-    ['nuxt-buefy', { css: false }],
+    [
+      'nuxt-buefy',
+      {
+        css: false,
+        materialDesignIcons: true,
+        materialDesignIconsHRef:
+          'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.1.45/css/materialdesignicons.min.css'
+      }
+    ],
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa'

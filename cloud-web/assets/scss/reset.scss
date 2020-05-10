@@ -1,15 +1,15 @@
-body.has-navbar-fixed-top, html.has-navbar-fixed-top{
-  padding-top:2.25rem;
-}
+//body.has-navbar-fixed-top, html.has-navbar-fixed-top{
+//  padding-top:2.25rem;
+//}
 
 body::-webkit-scrollbar {
   width: 1em;
 }
- 
+
 body::-webkit-scrollbar-track {
   background-color: #f9f9f9;
 }
- 
+
 body::-webkit-scrollbar-thumb {
   background-color: #d0d0d0;
   outline: 1px solid slategrey;
@@ -34,6 +34,14 @@ code {
   color: #0087e1 !important;
 }
 
-html{
-  font-size: 1vw;
+//html{
+//  font-size: 1vw;
+//}
+
+.modal-close {
+  &:before,
+  &:after {
+    background-color: white;
+    filter: drop-shadow(0px 0px 3px #000);
+  }
 }

@@ -17,7 +17,7 @@ func (w *Writer) Reader() io.Reader {
 }
 
 func (w *Writer) Close() error {
-	w.Writer.Close()
+	return w.Writer.Close()
 }
 
 func NewWriter() *Writer {

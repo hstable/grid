@@ -54,13 +54,18 @@
     </b-carousel>
     <div class="flex-none" style="width:350px;padding:0 0.75em">
       <b-datepicker v-model="date" inline :events="events" indicators="dots" />
-      <b-collapse style="margin-top: 0.75em" class="panel" animation="slide">
+      <b-collapse
+        v-show="devices.length > 0"
+        style="margin-top: 0.75em"
+        class="panel"
+        animation="slide"
+      >
         <div slot="trigger" class="panel-heading" role="button">
           <strong>设备操作</strong>
         </div>
         <p class="panel-tabs">
           <a
-            v-for="(c, i) of cameras"
+            v-for="(c, i) of devices"
             :key="c.ID"
             :class="{ 'is-active': indexCamera === i }"
             @click="indexCamera = i"
@@ -74,6 +79,7 @@
               style="height:100%;border-radius:0;border-color: whitesmoke"
               class="card-footer-item"
               outlined
+              @click="newPhoto"
               >图像抓拍
             </b-button>
             <b-button
@@ -119,11 +125,7 @@ export default {
       events: [],
       date: null,
       indexCamera: 0,
-      cameras: [
-        { ID: 0, Name: '摄像头1' },
-        { ID: 1, Name: '摄像头2' },
-        { ID: 2, Name: '摄像头3' }
-      ],
+      devices: [],
       gallery: false,
       al: {
         hasGrayscale: true,
@@ -149,13 +151,25 @@ export default {
       return this.$refs.indicator.settings.itemsToShow
     }
   },
-  created() {
-    this.initDatePicker()
-  },
   mounted() {
-    this.loadCarouselData()
+    const loading = this.$buefy.loading.open()
+    const waitList = [
+      this.loadCarouselData(),
+      this.initDatePicker(),
+      this.initDevicesList()
+    ]
+    Promise.all(waitList).then(() => {
+      loading.close()
+    })
   },
   methods: {
+    initDevicesList() {
+      return this.$xhr
+        .getDevices(1, 20, this.$route.params.towerID)
+        .then((res) => {
+          this.devices = res.data.data.devices.data
+        })
+    },
     handleIndexChange(val) {
       if (this.items.length - (val + this.itemsToShow) < 2) {
         const after =
@@ -169,7 +183,7 @@ export default {
       }
       this.loading = true
       this.$nextTick(() => {
-        this.$xhr
+        return this.$xhr
           .getTreeTowerImages(
             after,
             this.itemsToShow + 2,
@@ -196,7 +210,7 @@ export default {
                 this.items = [
                   {
                     title: '暂无图片',
-                    image: 'http://sx.zhysdxl.com:8001/images/noImage.jpg'
+                    image: '/noImage.jpg'
                   }
                 ]
               }
@@ -209,7 +223,7 @@ export default {
       })
     },
     initDatePicker() {
-      this.$xhr
+      return this.$xhr
         .getTowerMonthMarks(this.$route.params.towerID, new Date())
         .then((res) => {
           const interpreter = {
@@ -231,6 +245,18 @@ export default {
       } else {
         return document.documentElement.classList.remove('is-clipped')
       }
+    },
+    newPhoto() {
+      const loading = this.$buefy.loading.open()
+      const deviceID = this.devices[this.indexCamera].ID
+      this.$xhr
+        .newPhoto(deviceID)
+        .then((res) => {
+          this.loadCarouselData()
+        })
+        .finally(() => {
+          loading.close()
+        })
     }
   }
 }

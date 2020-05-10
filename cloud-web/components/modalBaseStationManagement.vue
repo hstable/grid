@@ -38,16 +38,25 @@
             {{ props.row.TowersNum }}
           </b-table-column>
 
-          <b-table-column label="操作" width="250">
+          <b-table-column label="操作" width="300">
             <div class="operate-box">
               <b-button
                 size="is-small"
                 icon-left="map-marker"
                 outlined
                 type="is-second"
-                @click="handleDeviceManagement(props.row)"
+                @click="handleClickLocation(props.row)"
               >
                 查看位置
+              </b-button>
+              <b-button
+                size="is-small"
+                icon-left="book"
+                outlined
+                type="is-twitter"
+                @click="handleClickLog(props.row)"
+              >
+                日志
               </b-button>
               <b-button
                 size="is-small"
@@ -75,14 +84,20 @@
     <footer class="modal-card-foot">
       <button class="button is-primary" @click="handleNew">添加边缘节点</button>
     </footer>
+    <b-modal :active.sync="showMap">
+      <modal-map v-if="showMap" :location="locationLatLng"></modal-map>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import ModalMap from './modalMap'
+import ModalLogEdgeServer from '@/components/modalLogEdgeServer'
 import ModalBaseStation from '@/components/modalBaseStation'
 
 export default {
   name: 'ModalBaseStationManagement',
+  components: { ModalMap },
   filters: {
     /**
      * Filter to truncate string, accepts a length parameter
@@ -99,7 +114,9 @@ export default {
     total: 0,
     loading: false,
     page: 1,
-    perPage: 20
+    perPage: 20,
+    showMap: false,
+    locationLatLng: null
   }),
   mounted() {
     this.loadAsyncData()
@@ -172,18 +189,22 @@ export default {
         }
       })
     },
-    handleDeviceManagement() {
-      // TODO
+    handleClickLocation(which) {
+      this.showMap = true
+      this.locationLatLng = which.Location.split(',')
+    },
+    handleClickLog(which) {
+      this.$buefy.modal.open({
+        component: ModalLogEdgeServer,
+        hasModalCard: true,
+        props: {
+          which
+        },
+        fullScreen: true
+      })
     }
   }
 }
 </script>
 
-<style lang="scss">
-.modal-close {
-  &::before,
-  &::after {
-    background-color: black;
-  }
-}
-</style>
+<style lang="scss"></style>

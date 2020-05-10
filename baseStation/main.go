@@ -11,9 +11,7 @@ import (
 func initDB() {
 	db := dao.DB()
 	//自动迁移Tables
-	db.AutoMigrate(
-
-	)
+	db.AutoMigrate()
 }
 
 func main() {

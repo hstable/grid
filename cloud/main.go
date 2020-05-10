@@ -7,6 +7,7 @@ import (
 	"github.com/mzz2017/grip/cloud/models/baseStation"
 	"github.com/mzz2017/grip/cloud/models/company"
 	"github.com/mzz2017/grip/cloud/models/device"
+	"github.com/mzz2017/grip/cloud/models/deviceNetwork"
 	"github.com/mzz2017/grip/cloud/models/image"
 	"github.com/mzz2017/grip/cloud/models/line"
 	"github.com/mzz2017/grip/cloud/models/power"
@@ -24,6 +25,7 @@ func initDB() {
 		&image.Image{},
 		&user.User{},
 		&baseStation.BaseStation{},
+		&deviceNetwork.DeviceNetwork{},
 		&device.Device{},
 		&line.Line{},
 		&power.Power{},
