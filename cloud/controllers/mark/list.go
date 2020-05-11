@@ -57,7 +57,7 @@ from images i
          inner join ` + "`lines`" + ` l
          inner join powers p on i.device_id = d.id and d.tower_id = t.id and t.line_id = l.id and l.power_id = p.id
 where i.mark != 'safe'
-`).Offset((page - 1) * pageSize).Limit(pageSize).Rows()
+`).Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Rows()
 	if err != nil {
 		return
 	}

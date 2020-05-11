@@ -21,10 +21,11 @@
             style="font-size: 0.8em"
           ></b-table>
           <p
-            v-show="!data.length"
+            v-show="!data || !data.length"
             style="position: absolute;height:100%;width:100%;text-align:center"
           >
-            暂无数据
+            <span v-if="data === null">暂无数据</span>
+            <span v-else>加载中...</span>
           </p>
         </div>
       </div>
@@ -97,11 +98,13 @@ export default {
   },
   methods: {
     loadMarks() {
-      this.$xhr.getMarksRisky(1, 6).then((res) => {
-        this.data = res.data.data.marks.data.map((x) => {
+      this.$xhr.getMarksRisky(1, 7).then((res) => {
+        const data = res.data.data.marks.data.map((x) => {
           x.CreatedTime = dayjs(x.CreatedAt).format('YYYY-MM-DD HH:mm')
           return x
         })
+        this.data = data || null
+        this.data = data
       })
     },
     loadPowerCounts() {
