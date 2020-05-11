@@ -92,7 +92,16 @@ func (b BaseStation) PushDevices() (err error) {
 	)
 	if err != nil {
 		err = fmt.Errorf("与基站通信时出现错误: %v", err.Error())
+		if b.Online {
+			b.Online = false
+			_ = b.UpdateOnline()
+		}
 		return
+	} else {
+		if !b.Online {
+			b.Online = true
+			_ = b.UpdateOnline()
+		}
 	}
 	defer resp.Body.Close()
 	bb, err := ioutil.ReadAll(resp.Body)

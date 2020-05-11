@@ -10,11 +10,19 @@
       </div>
       <div class="tile is-vertical">
         <MarkPie></MarkPie>
-        <div class="tile is-child" style="position: relative">
-          <b-table :data="data" :columns="columns"></b-table>
+        <div
+          class="tile is-child"
+          style="position: relative;cursor: pointer"
+          @click="handleClickLogMarksRisky"
+        >
+          <b-table
+            :data="data"
+            :columns="columns"
+            style="font-size: 0.8em"
+          ></b-table>
           <p
             v-show="!data.length"
-            style="position: absolute;height:100%;width:100%;text-align: center"
+            style="position: absolute;height:100%;width:100%;text-align:center"
           >
             暂无数据
           </p>
@@ -39,6 +47,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import PowerWaterfall from '../components/viser/PowerWaterfall'
 import AlertPie from '../components/viser/AlertPie'
 import DeviceGroupedBar from '../components/viser/DeviceGroupedBar'
@@ -46,6 +55,7 @@ import PowerBar from '../components/viser/PowerBar'
 import MarkPie from '../components/viser/MarkPie'
 import BlueBlockGraph from '@/components/viser/BlueBlockGraph'
 import ModalLogEdgeServer from '@/components/modalLogEdgeServer'
+import ModalLogMarksRisky from '@/components/modalLogMarksRisky'
 export default {
   name: 'HomePage',
   components: {
@@ -61,7 +71,7 @@ export default {
     data: [],
     columns: [
       {
-        field: 'Name',
+        field: 'TowerName',
         label: '塔杆名称',
         centered: true
       },
@@ -82,9 +92,18 @@ export default {
   },
   mounted() {
     this.initMap()
+    this.loadMarks()
     this.loadPowerCounts()
   },
   methods: {
+    loadMarks() {
+      this.$xhr.getMarksRisky(1, 6).then((res) => {
+        this.data = res.data.data.marks.data.map((x) => {
+          x.CreatedTime = dayjs(x.CreatedAt).format('YYYY-MM-DD HH:mm')
+          return x
+        })
+      })
+    },
     loadPowerCounts() {
       this.$xhr.getPowerCounts().then((res) => {
         const data = res.data.data
@@ -186,6 +205,13 @@ export default {
             })
           )
         }
+      })
+    },
+    handleClickLogMarksRisky() {
+      this.$buefy.modal.open({
+        component: ModalLogMarksRisky,
+        hasModalCard: true,
+        fullScreen: true
       })
     }
   }

@@ -26,13 +26,13 @@
             {{ props.row.TowerName }}
           </b-table-column>
 
-          <b-table-column field="Mark" label="结果">
+          <b-table-column field="Mark" label="告警级别">
             <b-tag :type="mark2color(props.row.Mark)">{{
               props.row.Mark | mark2name
             }}</b-tag>
           </b-table-column>
 
-          <b-table-column field="Annotate" label="备注">
+          <b-table-column field="Annotate" label="告警事由">
             {{ props.row.Annotate }}
           </b-table-column>
 
@@ -95,7 +95,7 @@ export default {
     data: [
       {
         CreatedAt: dayjs('2020-04-18 08:00:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -103,7 +103,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:59:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '信上I II线/224号（小号侧）',
         Mark: 'safe',
         Annotate: '',
@@ -119,7 +119,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:57:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'warning',
         Annotate: '起重机',
@@ -127,7 +127,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:56:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '信上I II线/214号',
         Mark: 'info',
         Annotate: '塔吊',
@@ -135,7 +135,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:55:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -143,7 +143,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:54:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -159,7 +159,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:52:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -167,7 +167,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:51:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -175,7 +175,7 @@ export default {
       },
       {
         CreatedAt: dayjs('2020-04-18 07:50:00').toDate(),
-        TowerID: 1,
+        BaseStationID: 1,
         TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
         Mark: 'safe',
         Annotate: '',
@@ -198,7 +198,7 @@ export default {
     handleOpenPreview(row) {
       this.$buefy.modal.open(
         `<p class="image is-4by3">
-              <img src="${apiRoot}/edgeServer/${row.TowerID}/image/${row.Filename}">
+              <img src="${apiRoot}/edgeServer/${row.BaseStationID}/image/${row.Filename}">
           </p>`
       )
     },

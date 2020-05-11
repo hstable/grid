@@ -31,7 +31,7 @@
           </b-table-column>
 
           <b-table-column field="Online" label="在线状态">
-            {{ props.row.Online ? '正常' : '无法正常通信' }}
+            {{ props.row.Online ? '正常' : '上一次通信失败' }}
           </b-table-column>
 
           <b-table-column field="TowersNum" label="塔杆数量" numeric>

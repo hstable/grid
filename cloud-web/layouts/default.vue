@@ -141,6 +141,10 @@
               </c-menu-item>
             </c-menu-item>
           </c-menu-item>
+          <b-navbar-item @click="handleClickLogMarksRisky">
+            <b-icon icon="alert" size="is-small"></b-icon>
+            <span>告警清单</span>
+          </b-navbar-item>
           <b-navbar-item @click="handleClickUserManagement">
             <b-icon icon="account" size="is-small"></b-icon>
             <span>用户管理</span>
@@ -177,6 +181,7 @@ import ModalPowerManagement from '@/components/modalPowerManagement'
 import ModalLineManagement from '@/components/modalLineManagement'
 import ModalBaseStationManagement from '@/components/modalBaseStationManagement'
 import CMenuItem from '@/components/buefy/MenuItem'
+import ModalLogMarksRisky from '@/components/modalLogMarksRisky'
 
 export default {
   components: { CMenuItem },
@@ -191,6 +196,13 @@ export default {
     this.setupTree()
   },
   methods: {
+    handleClickLogMarksRisky() {
+      this.$buefy.modal.open({
+        component: ModalLogMarksRisky,
+        hasModalCard: true,
+        fullScreen: true
+      })
+    },
     inactiveAll() {
       const menu = this.$refs.menu
       function f(component) {

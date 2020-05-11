@@ -8,6 +8,7 @@ import Tower from './tower'
 import BaseStation from './baseStation'
 import Device from './device'
 import Visualization from './visualization'
+import Mark from './mark'
 
 export default function({ $axios }) {
   Vue.prototype.$xhr = {
@@ -19,6 +20,7 @@ export default function({ $axios }) {
     ...Tower({ $axios }),
     ...BaseStation({ $axios }),
     ...Device({ $axios }),
-    ...Visualization({ $axios })
+    ...Visualization({ $axios }),
+    ...Mark({ $axios })
   }
 }

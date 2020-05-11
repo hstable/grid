@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"path"
 	"path/filepath"
+	"time"
 )
 
 type Image struct {
@@ -30,9 +31,12 @@ func GetByFilename(fname string) (img Image, err error) {
 	return
 }
 
-func GetByTowerIDAfter(towerID int, after int, limit int) (imgs []Image, err error) {
+func GetByTowerIDAfter(towerID int, after int, limit int, beginTime, endTime time.Time) (imgs []Image, err error) {
+	if endTime.IsZero() {
+		endTime = time.Now()
+	}
 	db := dao.DB()
-	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id>?", towerID, after).Limit(limit).Rows()
+	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id>? and i.created_at>=? and i.created_at<?", towerID, after, beginTime, endTime).Limit(limit).Rows()
 	if err != nil {
 		return
 	}

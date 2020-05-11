@@ -26,8 +26,17 @@ func GetLog(ctx *gin.Context) {
 	resp, err := http.Get(fmt.Sprintf("http://%v:3000/api/log", o.IP))
 	if err != nil {
 		err = fmt.Errorf("与基站通信时出现错误: %v", err.Error())
+		if o.Online {
+			o.Online = false
+			_ = o.UpdateOnline()
+		}
 		common.ResponseError(ctx, err)
 		return
+	} else {
+		if !o.Online {
+			o.Online = true
+			_ = o.UpdateOnline()
+		}
 	}
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

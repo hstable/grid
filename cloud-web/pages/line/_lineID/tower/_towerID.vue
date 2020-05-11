@@ -1,65 +1,93 @@
 <template>
   <div class="columns" style="padding:2.25em 0 0.75em">
-    <b-carousel
-      :key="items.length"
-      class="flex-none"
-      style="width:calc(100% - 340px - 1.5em)"
-      :autoplay="false"
-      with-carousel-list
-      :indicator="false"
-      :overlay="gallery"
-      animated="fade"
-      :repeat="false"
-      @change="handleIndexChange"
-    >
-      <b-carousel-item v-for="(item, i) in items" :key="i">
-        <figure class="image" @click="switchGallery(true)">
-          <img :src="item.image" />
-        </figure>
-      </b-carousel-item>
-      <span
-        v-if="gallery"
-        class="modal-close is-large"
-        @click="switchGallery(false)"
-      />
-      <template slot="list" slot-scope="props">
-        <b-carousel-list
-          ref="indicator"
-          v-model="props.active"
-          :data="items"
-          :config="al"
-          :refresh="gallery"
-          as-indicator
-          @switch="props.switch($event, false)"
-        >
-          <template slot="item" slot-scope="props2">
-            <figure
-              class="image"
-              :style="{
-                borderStyle: props2.list.borderColor ? 'solid' : 'none',
-                borderWidth: '3px',
-                borderColor: props2.list.borderColor
-              }"
-            >
-              <img :src="props2.list.image" :title="props2.list.title" />
-            </figure>
-          </template>
-        </b-carousel-list>
-      </template>
-      <template slot="overlay">
-        <div class="has-text-centered has-text-white">
-          Hello i'am overlay!
-        </div>
-      </template>
-    </b-carousel>
+    <div style="position: relative;width:calc(100% - 340px - 1.5em)">
+      <b-carousel
+        :key="items.length"
+        class="flex-none"
+        :autoplay="false"
+        with-carousel-list
+        :indicator="false"
+        :overlay="gallery"
+        animated="fade"
+        :repeat="false"
+        @change="handleIndexChange"
+      >
+        <b-carousel-item v-for="(item, i) in items" :key="i">
+          <figure class="image" @click="switchGallery(true)">
+            <img :src="item.image" />
+          </figure>
+        </b-carousel-item>
+        <span
+          v-if="gallery"
+          class="modal-close is-large"
+          @click="switchGallery(false)"
+        />
+        <template slot="list" slot-scope="props">
+          <b-carousel-list
+            ref="indicator"
+            v-model="props.active"
+            :data="items"
+            :config="al"
+            :refresh="gallery"
+            as-indicator
+            @switch="props.switch($event, false)"
+          >
+            <template slot="item" slot-scope="props2">
+              <figure
+                class="image"
+                :style="{
+                  borderStyle: props2.list.borderColor ? 'solid' : 'none',
+                  borderWidth: '3px',
+                  borderColor: props2.list.borderColor
+                }"
+              >
+                <img :src="props2.list.image" :title="props2.list.title" />
+              </figure>
+            </template>
+          </b-carousel-list>
+        </template>
+        <template slot="overlay">
+          <div class="has-text-centered has-text-white">
+            Hello i'am overlay!
+          </div>
+        </template>
+      </b-carousel>
+      <b-loading
+        :is-full-page="false"
+        :active.sync="loading"
+        :can-cancel="false"
+      ></b-loading>
+    </div>
     <div class="flex-none" style="width:350px;padding:0 0.75em">
-      <b-datepicker v-model="date" inline :events="events" indicators="dots" />
+      <div>
+        <b-datepicker
+          v-model="date"
+          class="towerID-date-picker"
+          inline
+          :events="events"
+          indicators="dots"
+          :selectable-dates="selectableDates"
+          :unselectable-days-of-week="unselectableDaysOfWeek"
+          @change-month="handleChangeMonth"
+          @change-year="handleChangeYear"
+        >
+          <b-loading
+            :is-full-page="false"
+            :active.sync="loadingDatePicker"
+            :can-cancel="false"
+          ></b-loading
+        ></b-datepicker>
+      </div>
       <b-collapse
-        v-show="devices.length > 0"
-        style="margin-top: 0.75em"
+        style="margin-top: 0.75em;position: relative"
         class="panel"
         animation="slide"
       >
+        <b-loading
+          :is-full-page="false"
+          :active.sync="loadingDeviceOperations"
+          :can-cancel="false"
+        ></b-loading>
         <div slot="trigger" class="panel-heading" role="button">
           <strong>设备操作</strong>
         </div>
@@ -67,50 +95,56 @@
           <a
             v-for="(c, i) of devices"
             :key="c.ID"
-            :class="{ 'is-active': indexCamera === i }"
-            @click="indexCamera = i"
+            :class="{ 'is-active': indexDevice === i }"
+            @click="indexDevice = i"
             >{{ c.Name }}</a
           >
         </p>
-        <div class="panel-block" style="padding: 0">
-          <div style="width:100%" class="card-footer">
-            <b-button
-              type="is-primary"
-              style="height:100%;border-radius:0;border-color: whitesmoke"
-              class="card-footer-item"
-              outlined
-              @click="newPhoto"
-              >图像抓拍
-            </b-button>
-            <b-button
-              type="is-light"
-              style="height:100%;border-radius:0;border-color: whitesmoke;color:gray"
-              class="card-footer-item"
-              outlined
-              >参数设置
-            </b-button>
-            <!--            <a class="card-footer-item">参数设置</a>-->
+        <div v-if="devices.length > 0">
+          <div class="panel-block" style="padding: 0">
+            <div style="width:100%" class="card-footer">
+              <b-button
+                type="is-primary"
+                style="height:100%;border-radius:0;border-color: whitesmoke"
+                class="card-footer-item"
+                outlined
+                @click="newPhoto"
+                >图像抓拍
+              </b-button>
+              <b-button
+                type="is-light"
+                style="height:100%;border-radius:0;border-color: whitesmoke;color:gray"
+                class="card-footer-item"
+                outlined
+                >参数设置
+              </b-button>
+              <!--            <a class="card-footer-item">参数设置</a>-->
+            </div>
           </div>
-        </div>
-        <div class="panel-block" style="padding: 0">
-          <div style="width:100%" class="card-footer">
-            <b-button
-              type="is-second"
-              style="height:100%;border-radius:0;border-color: whitesmoke"
-              class="card-footer-item"
-              outlined
-              >视频拍摄
-            </b-button>
+          <div class="panel-block" style="padding: 0">
+            <div style="width:100%" class="card-footer">
+              <b-button
+                type="is-second"
+                style="height:100%;border-radius:0;border-color: whitesmoke"
+                class="card-footer-item"
+                outlined
+                >视频拍摄
+              </b-button>
 
-            <b-button
-              type="is-danger"
-              style="height:100%;border-radius:0;border-color: whitesmoke"
-              class="card-footer-item"
-              outlined
-              >禁用
-            </b-button>
+              <b-button
+                type="is-danger"
+                style="height:100%;border-radius:0;border-color: whitesmoke"
+                class="card-footer-item"
+                outlined
+                >禁用
+              </b-button>
+            </div>
           </div>
         </div>
+        <p v-else class="panel-block">
+          <span v-if="loadingDeviceOperations">加载中...</span>
+          <span v-else>未在该塔杆下检测到设备</span>
+        </p>
       </b-collapse>
     </div>
   </div>
@@ -118,13 +152,14 @@
 
 <script>
 import dayjs from 'dayjs'
+
 export default {
   name: 'ID',
   data() {
     return {
       events: [],
       date: null,
-      indexCamera: 0,
+      indexDevice: 0,
       devices: [],
       gallery: false,
       al: {
@@ -143,41 +178,69 @@ export default {
       },
       items: [],
       end: false,
-      loading: false
+      loading: false,
+      loadingDatePicker: false,
+      loadingDeviceOperations: false,
+      selectableDates: [],
+      year: dayjs().year()
     }
   },
   computed: {
     itemsToShow() {
       return this.$refs.indicator.settings.itemsToShow
+    },
+    unselectableDaysOfWeek() {
+      if (this.selectableDates.length) {
+        return []
+      } else {
+        return [0, 1, 2, 3, 4, 5, 6]
+      }
+    }
+  },
+  watch: {
+    date(val) {
+      this.beginTime = val
+      this.endTime = dayjs(this.beginTime)
+        .add(1, 'day')
+        .toDate()
+      this.end = false
+      this.loading = false
+      this.loadCarouselData()
     }
   },
   mounted() {
-    const loading = this.$buefy.loading.open()
-    const waitList = [
-      this.loadCarouselData(),
-      this.initDatePicker(),
-      this.initDevicesList()
-    ]
-    Promise.all(waitList).then(() => {
-      loading.close()
-    })
+    this.loadCarouselData()
+    this.loadDatePicker()
+    this.initDevicesList()
   },
   methods: {
+    handleChangeYear(YY) {
+      this.year = YY
+    },
+    handleChangeMonth(MM) {
+      this.$nextTick(() => {
+        this.loadDatePicker(dayjs(`${this.year}-${MM + 1}-01`).toDate())
+      })
+    },
     initDevicesList() {
+      this.loadingDeviceOperations = true
       return this.$xhr
         .getDevices(1, 20, this.$route.params.towerID)
         .then((res) => {
           this.devices = res.data.data.devices.data
+        })
+        .finally(() => {
+          this.loadingDeviceOperations = false
         })
     },
     handleIndexChange(val) {
       if (this.items.length - (val + this.itemsToShow) < 2) {
         const after =
           this.items.length > 0 ? this.items[this.items.length - 1].ID : null
-        this.loadCarouselData(after)
+        this.loadCarouselData(after, true)
       }
     },
-    loadCarouselData(after) {
+    loadCarouselData(after, loadmore) {
       if (this.end || this.loading) {
         return
       }
@@ -187,7 +250,9 @@ export default {
           .getTreeTowerImages(
             after,
             this.itemsToShow + 2,
-            this.$route.params.towerID
+            this.$route.params.towerID,
+            this.beginTime,
+            this.endTime
           )
           .then((res) => {
             const interpreterColor = {
@@ -196,7 +261,14 @@ export default {
               info: 'rgb(80, 109, 164)'
             }
             const data = res.data.data
-            if (data.images) {
+            data.images == null && (data.images = [])
+            if (loadmore) {
+              this.items == null && (this.items = [])
+            } else {
+              this.end = false
+              this.items = []
+            }
+            if (data.images.length) {
               this.items.push(
                 ...data.images.map((x) => ({
                   ID: x.ID,
@@ -206,14 +278,15 @@ export default {
                 }))
               )
             } else {
-              if (!this.items.length) {
-                this.items = [
-                  {
-                    title: '暂无图片',
-                    image: '/noImage.jpg'
-                  }
-                ]
-              }
+              this.end = true
+            }
+            if (!this.items.length) {
+              this.items = [
+                {
+                  title: '暂无图片',
+                  image: '/noImage.jpg'
+                }
+              ]
               this.end = true
             }
           })
@@ -222,9 +295,11 @@ export default {
           })
       })
     },
-    initDatePicker() {
+    loadDatePicker(date) {
+      this.loadingDatePicker = true
+      !date && (date = new Date())
       return this.$xhr
-        .getTowerMonthMarks(this.$route.params.towerID, new Date())
+        .getTowerMonthMarks(this.$route.params.towerID, date)
         .then((res) => {
           const interpreter = {
             danger: 'is-red',
@@ -236,6 +311,10 @@ export default {
             date: dayjs(x.CreatedAt).toDate(),
             type: interpreter[x.Mark]
           }))
+          this.selectableDates = this.events.map((x) => x.date)
+        })
+        .finally(() => {
+          this.loadingDatePicker = false
         })
     },
     switchGallery(value) {
@@ -248,7 +327,7 @@ export default {
     },
     newPhoto() {
       const loading = this.$buefy.loading.open()
-      const deviceID = this.devices[this.indexCamera].ID
+      const deviceID = this.devices[this.indexDevice].ID
       this.$xhr
         .newPhoto(deviceID)
         .then((res) => {
@@ -295,12 +374,14 @@ export default {
     max-height: calc((100vh - 4.75em - 5px) / 7);
   }
 }
+
 .datepicker
   .datepicker-table
   .datepicker-body
   .datepicker-cell.is-selectable:focus:not(.is-selected) {
   background-color: transparent;
 }
+
 .datepicker
   .datepicker-table
   .datepicker-body.has-events
@@ -311,8 +392,14 @@ export default {
     overflow: hidden;
     width: calc(100% - 0.2em);
   }
+
   .event {
     flex-shrink: 0;
   }
+}
+.towerID-date-picker .datepicker-footer {
+  padding: 0;
+  border: none;
+  margin: 0;
 }
 </style>

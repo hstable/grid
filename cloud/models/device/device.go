@@ -133,7 +133,16 @@ func (d Device) NewPhoto() (img []byte, mark string, err error) {
 	)
 	if err != nil {
 		err = fmt.Errorf("与基站通信时出现错误: %v", err.Error())
+		if bs.Online {
+			bs.Online = false
+			_ = bs.UpdateOnline()
+		}
 		return
+	}else{
+		if !bs.Online {
+			bs.Online = true
+			_ = bs.UpdateOnline()
+		}
 	}
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)

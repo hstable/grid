@@ -10,6 +10,7 @@ import (
 	"github.com/mzz2017/grip/cloud/controllers/edgeServer"
 	"github.com/mzz2017/grip/cloud/controllers/image"
 	"github.com/mzz2017/grip/cloud/controllers/line"
+	"github.com/mzz2017/grip/cloud/controllers/mark"
 	"github.com/mzz2017/grip/cloud/controllers/power"
 	"github.com/mzz2017/grip/cloud/controllers/tower"
 	"github.com/mzz2017/grip/cloud/controllers/tree"
@@ -76,6 +77,7 @@ func init() {
 		adminGroup.POST("line/:lineID/tower", tower.Post)
 		adminGroup.PUT("tower/:id", tower.Put)
 		adminGroup.DELETE("tower/:id", tower.Delete)
+		adminGroup.GET("marks/tower/:id", tower.GetMarksThisMonth)
 
 		adminGroup.GET("tower/:towerID/devices", device.GetDevices)
 		adminGroup.POST("tower/:towerID/device", device.Post)
@@ -84,12 +86,13 @@ func init() {
 		adminGroup.PUT("device/:id/disabled", device.PutDisabled)
 		adminGroup.DELETE("device/:id", device.Delete)
 
-		adminGroup.GET("marks/tower/:id", tower.GetMarksThisMonth)
 		adminGroup.GET("edgeServer/:id/log", edgeServer.GetLog)
 		adminGroup.GET("visualization/locations", visualization.GetLocations)
 		adminGroup.GET("visualization/powerCounts", visualization.GetPowerCounts)
 		adminGroup.GET("visualization/companyDevices", visualization.GetCompanyDevices)
 		adminGroup.GET("visualization/marks", visualization.GetMarks)
+
+		adminGroup.GET("marks/risky", mark.GetMarksRisky)
 
 	}
 	ordinaryGroup := Router.Group("api")
