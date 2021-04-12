@@ -26,11 +26,11 @@
             {{ props.row.Location | beautifyLocation }}
           </b-table-column>
 
-          <b-table-column field="BaseStationName" label="所属基站">
+          <b-table-column field="BaseStationName" label="所属边缘节点">
             {{ mapID2BaseStation[props.row.BaseStationID].Name }}
           </b-table-column>
 
-          <b-table-column field="BaseStationIP" label="所属基站IP">
+          <b-table-column field="BaseStationIP" label="所属边缘节点IP">
             {{ mapID2BaseStation[props.row.BaseStationID].IP }}
           </b-table-column>
 

@@ -14,7 +14,7 @@
           required
         ></b-input>
       </b-field>
-      <b-field label="所属基站">
+      <b-field label="所属边缘节点">
         <b-select
           ref="baseStation"
           v-model="data.BaseStationID"

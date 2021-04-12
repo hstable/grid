@@ -94,16 +94,16 @@ export default {
     color: #111213;
   }
   font-size: 12px;
-  width: 26rem;
+  max-width: 98vw;
   padding: 0.75rem 1.25rem;
   margin-bottom: 1rem;
   border-radius: 0.25rem;
   position: fixed;
-  top: 1rem;
+  top: 1vw;
+  right: 1vw;
   background-color: white;
-  min-width: 22rem;
+  width: 32em;
   border-width: 0;
-  right: 1rem;
   box-shadow: 0 2px 6px 0 rgba(114, 124, 245, 0.5);
   hr {
     margin: 0.5rem 0;

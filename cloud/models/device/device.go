@@ -138,7 +138,7 @@ func (d Device) NewPhoto() (img []byte, mark string, err error) {
 			_ = bs.UpdateOnline()
 		}
 		return
-	}else{
+	} else {
 		if !bs.Online {
 			bs.Online = true
 			_ = bs.UpdateOnline()

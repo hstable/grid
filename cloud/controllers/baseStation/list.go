@@ -40,6 +40,7 @@ func getBaseStations(page, limit int) (result []*listResult, total int, err erro
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	result = make([]*listResult, 0)
 	for rows.Next() {
 		t := new(listResult)

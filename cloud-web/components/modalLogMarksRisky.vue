@@ -34,6 +34,10 @@
             {{ props.row.PowerName }}
           </b-table-column>
 
+          <b-table-column field="BaseStationName" label="所属边缘节点">
+            {{ props.row.BaseStationName }}
+          </b-table-column>
+
           <b-table-column field="Mark" label="告警级别">
             <b-tag :type="mark2color(props.row.Mark)">{{
               props.row.Mark | mark2name

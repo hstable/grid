@@ -17,6 +17,7 @@ func GetMarks(ctx *gin.Context) {
 		return
 	}
 	result := make([]*Result, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(Result)
 		err := dao.DB().ScanRows(rows, &t)

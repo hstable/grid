@@ -26,6 +26,6 @@ func init() {
 		freeGroup.GET("image/:filename", controllers.GetImage)
 		freeGroup.POST("devices", controllers.PostDevices)
 		freeGroup.GET("device/:ip/newPhoto", controllers.GetNewPhoto)
-		freeGroup.GET("log", controllers.GetLog)
+		freeGroup.GET("log", controllers.GetLog) //TODO: 是否是所有的判定记录
 	}
 }

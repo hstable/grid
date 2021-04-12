@@ -32,6 +32,7 @@ func getPowers(page, limit int) (result []*power.Power, total int, err error) {
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	result = make([]*power.Power, 0)
 	for rows.Next() {
 		t := new(power.Power)

@@ -35,6 +35,7 @@ func getUsers(page, limit int) (result []*user.User, total int, err error) {
 		return
 	}
 	result = make([]*user.User, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(user.User)
 		err := dao.DB().ScanRows(rows, &t)
@@ -53,6 +54,7 @@ func getCompanies() (result []*company.Company, err error) {
 		return
 	}
 	result = make([]*company.Company, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(company.Company)
 		err := dao.DB().ScanRows(rows, &t)

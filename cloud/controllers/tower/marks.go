@@ -26,6 +26,7 @@ func GetMarksThisMonth(ctx *gin.Context) {
 		return
 	}
 	result := make([]*image.Image, 0)
+	defer rows.Close()
 	for rows.Next() {
 		m := new(image.Image)
 		_ = dao.DB().ScanRows(rows, &m)

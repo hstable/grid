@@ -49,6 +49,7 @@ func getTowers(page, limit int, lineID uint) (result []*listResult, total int, e
 		return
 	}
 	result = make([]*listResult, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(listResult)
 		err := dao.DB().ScanRows(rows, &t)
@@ -66,6 +67,7 @@ func getBaseStations() (result []*baseStation.BaseStation, err error) {
 		return
 	}
 	result = make([]*baseStation.BaseStation, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(baseStation.BaseStation)
 		err := dao.DB().ScanRows(rows, &t)

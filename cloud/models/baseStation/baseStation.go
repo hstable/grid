@@ -59,6 +59,7 @@ func getDeviceNetworks(baseStationID uint) (dn []*deviceNetwork.DeviceNetwork, e
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		n := new(deviceNetwork.DeviceNetwork)
 		err := dao.DB().ScanRows(rows, n)

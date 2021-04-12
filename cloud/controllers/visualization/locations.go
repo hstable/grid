@@ -15,6 +15,7 @@ func GetLocations(ctx *gin.Context) {
 		return
 	}
 	result := make([]*baseStation.BaseStation, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(baseStation.BaseStation)
 		err := dao.DB().ScanRows(rows, &t)
@@ -29,6 +30,7 @@ func GetLocations(ctx *gin.Context) {
 		return
 	}
 	result2 := make([]*tower.Tower, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(tower.Tower)
 		err := dao.DB().ScanRows(rows, &t)

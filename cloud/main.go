@@ -15,6 +15,7 @@ import (
 	"github.com/mzz2017/grip/cloud/models/user"
 	"github.com/mzz2017/grip/cloud/router"
 	"log"
+	"time"
 )
 
 func initDB() {
@@ -31,6 +32,9 @@ func initDB() {
 		&power.Power{},
 		&tower.Tower{},
 	)
+	db.DB().SetMaxIdleConns(50)
+	db.DB().SetMaxOpenConns(50)
+	db.DB().SetConnMaxLifetime(time.Minute)
 }
 
 func main() {

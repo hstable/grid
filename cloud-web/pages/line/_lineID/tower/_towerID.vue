@@ -2,7 +2,8 @@
   <div class="columns" style="padding:2.25em 0 0.75em">
     <div style="position: relative;width:calc(100% - 340px - 1.5em)">
       <b-carousel
-        :key="items.length"
+        v-if="items.length"
+        v-model="carouselValue"
         class="flex-none"
         :autoplay="false"
         with-carousel-list
@@ -38,23 +39,23 @@
                 :style="{
                   borderStyle: props2.list.borderColor ? 'solid' : 'none',
                   borderWidth: '3px',
-                  borderColor: props2.list.borderColor
+                  borderColor: props2.list.borderColor,
+                  height: '100%'
                 }"
               >
-                <img :src="props2.list.image" :title="props2.list.title" />
+                <img
+                  :src="props2.list.image"
+                  :title="props2.list.title"
+                  style="height: 100%"
+                />
               </figure>
             </template>
           </b-carousel-list>
         </template>
-        <template slot="overlay">
-          <div class="has-text-centered has-text-white">
-            Hello i'am overlay!
-          </div>
-        </template>
       </b-carousel>
       <b-loading
         :is-full-page="false"
-        :active.sync="loading"
+        :active="loading && !loadmore"
         :can-cancel="false"
       ></b-loading>
     </div>
@@ -157,6 +158,7 @@ export default {
   name: 'ID',
   data() {
     return {
+      carouselValue: 0,
       events: [],
       date: null,
       indexDevice: 0,
@@ -179,6 +181,7 @@ export default {
       items: [],
       end: false,
       loading: false,
+      loadmore: false,
       loadingDatePicker: false,
       loadingDeviceOperations: false,
       selectableDates: [],
@@ -187,7 +190,9 @@ export default {
   },
   computed: {
     itemsToShow() {
-      return this.$refs.indicator.settings.itemsToShow
+      return this.$refs.indicator
+        ? this.$refs.indicator.settings.itemsToShow
+        : 6
     },
     unselectableDaysOfWeek() {
       if (this.selectableDates.length) {
@@ -245,6 +250,7 @@ export default {
         return
       }
       this.loading = true
+      loadmore && (this.loadmore = true)
       this.$nextTick(() => {
         return this.$xhr
           .getTreeTowerImages(
@@ -258,7 +264,8 @@ export default {
             const interpreterColor = {
               danger: 'rgba(255, 0, 0, 0.73)',
               warning: 'rgb(255, 200, 0)',
-              info: 'rgb(80, 109, 164)'
+              info: 'rgb(80, 109, 164)',
+              safe: 'transparent'
             }
             const data = res.data.data
             data.images == null && (data.images = [])
@@ -277,6 +284,7 @@ export default {
                   borderColor: interpreterColor[x.Mark]
                 }))
               )
+              this.$refs.indicator.total += data.images.length
             } else {
               this.end = true
             }
@@ -292,6 +300,7 @@ export default {
           })
           .finally(() => {
             this.loading = false
+            this.loadmore = false
           })
       })
     },
@@ -331,6 +340,8 @@ export default {
       this.$xhr
         .newPhoto(deviceID)
         .then((res) => {
+          this.beginTime = null
+          this.endTime = null
           this.loadCarouselData()
         })
         .finally(() => {

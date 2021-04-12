@@ -1,4 +1,4 @@
-package edgeServer
+package baseStation
 
 import (
 	"fmt"

@@ -43,6 +43,7 @@ func getLines(page, limit int) (result []*listResult, total int, err error) {
 		return
 	}
 	result = make([]*listResult, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(listResult)
 		err := dao.DB().ScanRows(rows, &t)
@@ -60,6 +61,7 @@ func getCompanies() (result []*company.Company, err error) {
 		return
 	}
 	result = make([]*company.Company, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(company.Company)
 		err := dao.DB().ScanRows(rows, &t)
@@ -76,6 +78,7 @@ func getPowers() (result []*power.Power, err error) {
 		return
 	}
 	result = make([]*power.Power, 0)
+	defer rows.Close()
 	for rows.Next() {
 		t := new(power.Power)
 		err := dao.DB().ScanRows(rows, &t)

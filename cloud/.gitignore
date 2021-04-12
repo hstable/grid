@@ -9,6 +9,7 @@ config/app.json
 *.dll
 *.so
 *.dylib
+/cloud
 
 # Test binary, build with `go test -c`
 *.test

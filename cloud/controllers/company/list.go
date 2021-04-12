@@ -32,6 +32,7 @@ func getCompanies(page, limit int) (result []*company.Company, total int, err er
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	result = make([]*company.Company, 0)
 	for rows.Next() {
 		t := new(company.Company)

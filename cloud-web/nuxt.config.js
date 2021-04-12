@@ -58,7 +58,7 @@ export default {
         css: false,
         materialDesignIcons: true,
         materialDesignIconsHRef:
-          'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.1.45/css/materialdesignicons.min.css'
+          'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css'
       }
     ],
     // Doc: https://axios.nuxtjs.org/usage
@@ -81,7 +81,8 @@ export default {
       if (ctx.isDev) {
         config.plugins.push(
           new webpack.DefinePlugin({
-            apiRoot: "'http://localhost:8110/api'"
+            // eslint-disable-next-line no-template-curly-in-string
+            apiRoot: '`//${location.hostname}:8110/api`'
           })
         )
       } else {
@@ -94,6 +95,7 @@ export default {
     }
   },
   server: {
+    host: '0.0.0.0',
     port: 3080
   }
 }

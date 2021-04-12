@@ -11,7 +11,7 @@ import (
 
 func getParams(ctx *gin.Context) (towerID, after, limit int, beginTime, endTime time.Time, err error) {
 	_towerID := ctx.Param("towerID")
-	_after := ctx.DefaultQuery("after", "0")
+	_after := ctx.DefaultQuery("after", strconv.Itoa(0x3f3f3f3f))
 	_limit := ctx.DefaultQuery("limit", "4")
 	_beginTime := ctx.Query("beginTime")
 	_endTime := ctx.Query("endTime")

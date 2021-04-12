@@ -7,7 +7,6 @@ import (
 	"github.com/mzz2017/grip/cloud/controllers/baseStation"
 	"github.com/mzz2017/grip/cloud/controllers/company"
 	"github.com/mzz2017/grip/cloud/controllers/device"
-	"github.com/mzz2017/grip/cloud/controllers/edgeServer"
 	"github.com/mzz2017/grip/cloud/controllers/image"
 	"github.com/mzz2017/grip/cloud/controllers/line"
 	"github.com/mzz2017/grip/cloud/controllers/mark"
@@ -37,7 +36,7 @@ func init() {
 		//无需登录也可使用的接口
 		freeGroup.POST("user/login", user.PostLogin)
 		freeGroup.GET("image/:filename", image.Get)
-		freeGroup.GET("edgeServer/:id/image/:filename", edgeServer.GetImage)
+		freeGroup.GET("edgeServer/:id/image/:filename", baseStation.GetImage)
 	}
 	adminGroup := Router.Group("api")
 	adminGroup.Use(common.JWTAuth(true))
@@ -86,7 +85,7 @@ func init() {
 		adminGroup.PUT("device/:id/disabled", device.PutDisabled)
 		adminGroup.DELETE("device/:id", device.Delete)
 
-		adminGroup.GET("edgeServer/:id/log", edgeServer.GetLog)
+		adminGroup.GET("edgeServer/:id/log", baseStation.GetLog)
 		adminGroup.GET("visualization/locations", visualization.GetLocations)
 		adminGroup.GET("visualization/powerCounts", visualization.GetPowerCounts)
 		adminGroup.GET("visualization/companyDevices", visualization.GetCompanyDevices)

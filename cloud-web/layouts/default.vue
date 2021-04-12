@@ -62,7 +62,7 @@
       </template>
     </b-navbar>
 
-    <section class="main-content columns" style="margin-bottom: 0">
+    <section class="main-content columns">
       <b-menu ref="menu" class="column section">
         <b-menu-list label="MENU">
           <c-menu-item
@@ -629,5 +629,8 @@ a.dropdown-item.is-active,
 .dropdown .dropdown-menu .has-link a.is-active,
 button.dropdown-item.is-active {
   background-color: unset;
+}
+.columns {
+  margin: 0 !important;
 }
 </style>

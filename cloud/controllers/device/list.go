@@ -57,6 +57,7 @@ func getDevices(page, limit int, towerID uint) (result []*device.Device, total i
 		}
 		return t, af.Where("id=?", t.NetworkID).First(&t.Network).Error
 	}
+	defer rows.Close()
 	for rows.Next() {
 		t, err := scan(rows)
 		if err != nil {

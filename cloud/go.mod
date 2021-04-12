@@ -15,4 +15,5 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/stevenroose/gonfig v0.1.4
 	github.com/stretchr/testify v1.5.1 // indirect
+	github.com/unrolled/secure v1.0.8
 )

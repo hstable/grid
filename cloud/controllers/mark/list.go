@@ -31,13 +31,14 @@ func getParams(ctx *gin.Context) (page, pageSize int, err error) {
 func GetMarksRisky(ctx *gin.Context) {
 	type Result struct {
 		image.Image
-		TowerName     string
-		TowerID       uint
-		LineName      string
-		LineID        uint
-		PowerName     string
-		PowerID       uint
-		BaseStationID uint
+		TowerName       string
+		TowerID         uint
+		LineName        string
+		LineID          uint
+		PowerName       string
+		PowerID         uint
+		BaseStationID   uint
+		BaseStationName string
 	}
 	var err error
 	defer func() {
@@ -50,18 +51,21 @@ func GetMarksRisky(ctx *gin.Context) {
 		return
 	}
 	rows, err := dao.DB().Raw(`
-select i.*, t.id tower_id, t.name tower_name, l.id line_id, l.name line_name, p.id power_id, p.name power_name,t.base_station_id
+select i.*, t.id tower_id, t.name tower_name, l.id line_id, l.name line_name, p.id power_id, p.name power_name,t.base_station_id,b.name base_station_name
 from images i
          inner join devices d
          inner join towers t
          inner join ` + "`lines`" + ` l
-         inner join powers p on i.device_id = d.id and d.tower_id = t.id and t.line_id = l.id and l.power_id = p.id
+         inner join powers p
+         inner join base_stations b
+on i.device_id = d.id and d.tower_id = t.id and t.line_id = l.id and l.power_id = p.id and t.base_station_id=b.id
 where i.mark != 'safe'
 `).Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Rows()
 	if err != nil {
 		return
 	}
 	result := make([]*Result, 0)
+	defer rows.Close()
 	for rows.Next() {
 		m := new(Result)
 		_ = dao.DB().ScanRows(rows, &m)
