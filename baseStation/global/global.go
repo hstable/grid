@@ -56,5 +56,6 @@ func LoadMapIPDevice(b []byte) {
 }
 
 func init() {
-	LoadMapIPDevice(nil)
+	// not use basestation now
+	// LoadMapIPDevice(nil)
 }

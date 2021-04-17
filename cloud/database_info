@@ -1,0 +1,4 @@
+go run . --db_username root --db_password Miaoxiaojie123
+mysql host: api.mzz.pub:3306 用户名密码如上所示。
+
+数据库grip下的detection_pics存放图片二进制以及路径

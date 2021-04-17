@@ -31,7 +31,7 @@ func (d Device) BaseStation() (*baseStation.BaseStation, error) {
 	return &b, err
 }
 
-func (d Device) Insert() (err error) {
+func (d *Device) Insert() (err error) {
 	db := dao.DB()
 	af := db.Begin()
 	defer func() {
@@ -50,7 +50,7 @@ func (d Device) Insert() (err error) {
 	return af.Model(&Device{}).Create(&d).Error
 }
 
-func (d Device) Update() (err error) {
+func (d *Device) Update() (err error) {
 	var e Device
 	if dao.DB().Model(&d).First(&e); e.CreatedAt.IsZero() {
 		return errors.New("invalid ID")

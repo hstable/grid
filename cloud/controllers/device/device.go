@@ -45,14 +45,18 @@ func Post(ctx *gin.Context) {
 	d.Model = gorm.Model{}
 	err = d.Insert()
 	if err != nil {
+		err = fmt.Errorf("failed to insert:%w", err)
 		return
 	}
+
 	bs, err := d.BaseStation()
 	if err != nil {
+		err = fmt.Errorf("failed to get basestation:%w", err)
 		return
 	}
 	err = bs.PushDevices()
 	if err != nil {
+		err = fmt.Errorf("failed to post devices:%w", err)
 		return
 	}
 	common.ResponseSuccess(ctx, nil)
