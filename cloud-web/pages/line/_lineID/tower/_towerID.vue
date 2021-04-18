@@ -277,12 +277,18 @@ export default {
             }
             if (data.images.length) {
               this.items.push(
-                ...data.images.map((x) => ({
-                  ID: x.ID,
-                  title: x.Name,
-                  image: `${apiRoot}/image/${x.Filename}`,
-                  borderColor: interpreterColor[x.Mark]
-                }))
+                ...data.images
+                  .filter(
+                    (x) =>
+                      !this.items.length ||
+                      x.ID < this.items[this.items.length - 1].ID
+                  )
+                  .map((x) => ({
+                    ID: x.ID,
+                    title: x.Name,
+                    image: `${apiRoot}/image/${x.Filename}`,
+                    borderColor: interpreterColor[x.Mark]
+                  }))
               )
               this.$refs.indicator.total += data.images.length
             } else {

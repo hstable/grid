@@ -19,7 +19,11 @@ func GetMarksThisMonth(ctx *gin.Context) {
 		}
 	}
 	thisMonthBegin := time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, time.UTC)
-	nextMonthBegin := time.Date(t.Year(), (t.Month()+1)%12, 1, 0, 0, 0, 0, time.UTC)
+	nextMonthBegin := time.Date(t.Year(), t.Month()+1, 1, 0, 0, 0, 0, time.UTC)
+	if t.Month() == 12 {
+		nextMonthBegin = time.Date(t.Year()+1, 1, 1, 0, 0, 0, 0, time.UTC)
+	}
+
 	rows, err := dao.DB().Raw("select i.* from images i,devices d where i.created_at>=? and i.created_at<? and i.device_id=d.id and d.tower_id=? and i.mark!='safe'", thisMonthBegin, nextMonthBegin, id).Rows()
 	if err != nil {
 		common.ResponseError(ctx, err)
