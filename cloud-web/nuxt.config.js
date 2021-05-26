@@ -82,7 +82,7 @@ export default {
         config.plugins.push(
           new webpack.DefinePlugin({
             // eslint-disable-next-line no-template-curly-in-string
-            apiRoot: '`//${location.hostname}:8110/api`'
+            apiRoot: '`//10.250.187.202:8110/api`'
           })
         )
       } else {
