@@ -29,33 +29,6 @@
 <script>
 const DataSet = require('@antv/data-set')
 
-const sourceData = [
-  { value: 149, type: '灾害', name: '烟' },
-  { value: 5, type: '灾害', name: '火灾' },
-  { value: 2517, type: '施工', name: '铲车' },
-  { value: 2260, type: '施工', name: '工程车辆' },
-  { value: 5765, type: '施工', name: '起重机' },
-  { value: 3479, type: '施工', name: '吊车' }
-]
-
-const dv = new DataSet.View().source(sourceData)
-dv.transform({
-  type: 'percent',
-  field: 'value',
-  dimension: 'type',
-  as: 'percent'
-})
-const data = dv.rows
-
-const viewDv = new DataSet.View().source(sourceData)
-viewDv.transform({
-  type: 'percent',
-  field: 'value',
-  dimension: 'name',
-  as: 'percent'
-})
-const viewData = viewDv.rows
-
 const scale = {
   dataType: 'percent',
   formatter: '.2%'
@@ -91,9 +64,7 @@ export default {
   name: 'AlertPie',
   data() {
     return {
-      data,
       scale,
-      viewData,
       height: 300,
       itemTpl,
       tooltip,
@@ -101,6 +72,33 @@ export default {
       label,
       style
     }
+  },
+  computed: {
+    data() {
+      const dv = new DataSet.View().source(this.sourceData)
+      dv.transform({
+        type: 'percent',
+        field: 'value',
+        dimension: 'type',
+        as: 'percent'
+      })
+      return dv.rows
+    },
+    viewData() {
+      const viewDv = new DataSet.View().source(this.sourceData)
+      viewDv.transform({
+        type: 'percent',
+        field: 'value',
+        dimension: 'name',
+        as: 'percent'
+      })
+      return viewDv.rows
+    }
+  },
+  created() {
+    this.$xhr.getTypeCounts().then((res) => {
+      this.sourceData = res.data.data.result
+    })
   }
 }
 </script>

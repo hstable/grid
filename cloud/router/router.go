@@ -89,6 +89,7 @@ func init() {
 		adminGroup.GET("visualization/locations", visualization.GetLocations)
 		adminGroup.GET("visualization/powerCounts", visualization.GetPowerCounts)
 		adminGroup.GET("visualization/companyDevices", visualization.GetCompanyDevices)
+		adminGroup.GET("visualization/typeCounts", visualization.GetTypeCounts)
 		adminGroup.GET("visualization/marks", visualization.GetMarks)
 
 		adminGroup.GET("marks/risky", mark.GetMarksRisky)
