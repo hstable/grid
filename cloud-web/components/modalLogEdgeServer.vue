@@ -93,54 +93,54 @@ export default {
     page: 1,
     perPage: 20,
     data: [
-      {
-        CreatedAt: dayjs('2020-04-18 08:00:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:59:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '信上I II线/224号（小号侧）',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '2.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:58:00').toDate(),
-        TowerID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'danger',
-        Annotate: '塔吊',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:57:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'warning',
-        Annotate: '起重机',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:56:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '信上I II线/214号',
-        Mark: 'info',
-        Annotate: '塔吊',
-        Filename: '3.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:55:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
-      },
+      // {
+      // CreatedAt: dayjs('2020-04-18 08:00:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:59:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '信上I II线/224号（小号侧）',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '2.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:58:00').toDate(),
+      // TowerID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'danger',
+      // Annotate: '塔吊',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:57:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'warning',
+      // Annotate: '起重机',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:56:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '信上I II线/214号',
+      // Mark: 'info',
+      // Annotate: '塔吊',
+      // Filename: '3.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:55:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // },
       {
         CreatedAt: dayjs('2020-04-18 07:54:00').toDate(),
         BaseStationID: 1,
@@ -148,39 +148,39 @@ export default {
         Mark: 'safe',
         Annotate: '',
         Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:53:00').toDate(),
-        TowerID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:52:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:51:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
-      },
-      {
-        CreatedAt: dayjs('2020-04-18 07:50:00').toDate(),
-        BaseStationID: 1,
-        TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
-        Mark: 'safe',
-        Annotate: '',
-        Filename: '1.jpg'
       }
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:53:00').toDate(),
+      // TowerID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:52:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:51:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // },
+      // {
+      // CreatedAt: dayjs('2020-04-18 07:50:00').toDate(),
+      // BaseStationID: 1,
+      // TowerName: '鱼镐Ⅰ、Ⅱ线/005号大号侧',
+      // Mark: 'safe',
+      // Annotate: '',
+      // Filename: '1.jpg'
+      // }
     ]
   }),
   created() {

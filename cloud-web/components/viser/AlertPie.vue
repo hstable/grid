@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-chart :force-fit="true" :height="height" :data="data" :scale="scale">
+    <v-chart
+      v-if="ok"
+      :force-fit="true"
+      :height="height"
+      :data="data"
+      :scale="scale"
+    >
       <v-tooltip :show-title="false" :item-tpl="itemTpl" />
       <v-coord type="theta" :radius="0.5" />
       <v-pie
@@ -70,7 +76,8 @@ export default {
       tooltip,
       color,
       label,
-      style
+      style,
+      ok: false
     }
   },
   computed: {
@@ -98,6 +105,7 @@ export default {
   created() {
     this.$xhr.getTypeCounts().then((res) => {
       this.sourceData = res.data.data.result
+      this.ok = true
     })
   }
 }
