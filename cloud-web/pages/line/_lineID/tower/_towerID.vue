@@ -3,7 +3,8 @@
     <div
       :style="{
         position: 'relative',
-        width: !type ? 'calc(100% - 340px - 1.5em)' : 'calc(100% - 1.5em)'
+        width:
+          type === 'vis' ? 'calc(100% - 340px - 1.5em)' : 'calc(100% - 1.5em)'
       }"
     >
       <b-carousel
