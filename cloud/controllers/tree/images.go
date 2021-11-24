@@ -9,12 +9,13 @@ import (
 	"time"
 )
 
-func getParams(ctx *gin.Context) (towerID, after, limit int, beginTime, endTime time.Time, err error) {
+func getParams(ctx *gin.Context) (towerID, after, limit int, beginTime, endTime time.Time, typ string, err error) {
 	_towerID := ctx.Param("towerID")
 	_after := ctx.DefaultQuery("after", strconv.Itoa(0x3f3f3f3f))
 	_limit := ctx.DefaultQuery("limit", "4")
 	_beginTime := ctx.Query("beginTime")
 	_endTime := ctx.Query("endTime")
+	typ = ctx.Query("type")
 	towerID, err = strconv.Atoi(_towerID)
 	if _towerID == "" || err != nil {
 		err = errors.New("invalid towerID")
@@ -52,12 +53,12 @@ func getParams(ctx *gin.Context) (towerID, after, limit int, beginTime, endTime 
 }
 
 func GetImages(ctx *gin.Context) {
-	towerID, after, limit, beginTime, endTime, err := getParams(ctx)
+	towerID, after, limit, beginTime, endTime, typ, err := getParams(ctx)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return
 	}
-	t, err := image.GetByTowerIDAfter(towerID, after, limit, beginTime, endTime)
+	t, err := image.GetByTowerIDAfter(towerID, after, limit, beginTime, endTime, typ)
 	if err != nil {
 		common.ResponseError(ctx, err)
 		return

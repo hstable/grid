@@ -1,6 +1,11 @@
 <template>
   <div class="columns" style="padding:2.25em 0 0.75em">
-    <div style="position: relative;width:calc(100% - 340px - 1.5em)">
+    <div
+      :style="{
+        position: 'relative',
+        width: !type ? 'calc(100% - 340px - 1.5em)' : 'calc(100% - 1.5em)'
+      }"
+    >
       <b-carousel
         v-if="items.length"
         v-model="carouselValue"
@@ -59,7 +64,11 @@
         :can-cancel="false"
       ></b-loading>
     </div>
-    <div class="flex-none" style="width:350px;padding:0 0.75em">
+    <div
+      v-if="type === 'vis'"
+      class="flex-none"
+      style="width:350px;padding:0 0.75em"
+    >
       <div>
         <b-datepicker
           v-model="date"
@@ -185,12 +194,13 @@ export default {
       loadingDatePicker: false,
       loadingDeviceOperations: false,
       selectableDates: [],
-      year: dayjs().year()
+      year: dayjs().year(),
+      type: 'vis'
     }
   },
   computed: {
     itemsToShow() {
-      return this.$refs.indicator
+      return this.$refs?.indicator
         ? this.$refs.indicator.settings.itemsToShow
         : 6
     },
@@ -214,11 +224,22 @@ export default {
     }
   },
   mounted() {
-    this.loadCarouselData()
-    this.loadDatePicker()
-    this.initDevicesList()
+    this.loadData()
+  },
+  beforeRouteUpdate(to, from, next) {
+    next()
+    this.loadData()
   },
   methods: {
+    loadData() {
+      this.loading = false
+      this.end = false
+      this.items = []
+      this.type = this.$route.query.type
+      this.loadCarouselData()
+      this.loadDatePicker()
+      this.initDevicesList()
+    },
     handleChangeYear(YY) {
       this.year = YY
     },
@@ -228,6 +249,9 @@ export default {
       })
     },
     initDevicesList() {
+      if (this.type !== 'vis') {
+        return
+      }
       this.loadingDeviceOperations = true
       return this.$xhr
         .getDevices(1, 20, this.$route.params.towerID)
@@ -258,7 +282,8 @@ export default {
             this.itemsToShow + 2,
             this.$route.params.towerID,
             this.beginTime,
-            this.endTime
+            this.endTime,
+            this.type === 'vis' ? '' : this.type
           )
           .then((res) => {
             const interpreterColor = {
