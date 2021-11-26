@@ -36,7 +36,7 @@ func GetByTowerIDAfter(towerID int, after int, limit int, beginTime, endTime tim
 		endTime = time.Now()
 	}
 	db := dao.DB()
-	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id<? and i.created_at>=? and i.created_at<?", towerID, after, beginTime, endTime).Limit(limit).Order("i.created_at desc").Rows()
+	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id<? and i.created_at>=? and i.created_at<?", towerID, after, beginTime, endTime).Limit(limit).Order("id desc").Rows()
 	if err != nil {
 		return
 	}

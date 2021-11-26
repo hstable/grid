@@ -7,12 +7,12 @@ import (
 )
 
 type Config struct {
-	DBUsername       string `id:"db_username"`
-	DBPassword       string `id:"db_password"`
-	DBHost           string `id:"db_host" default:"api.mzz.pub"`
+	DBUsername       string `id:"db_username" default:"root"`
+	DBPassword       string `id:"db_password" default:"Talented10"`
+	DBHost           string `id:"db_host" default:"localhost"`
 	DBPort           int    `id:"db_port" default:"3306"`
 	DBDatabase       string `id:"db_database" default:"grip"`
-	AssetDir         string `id:"asset_dir" default:"/var/www/grip_imgs"`
+	AssetDir         string `id:"asset_dir" default:"/home/talented/Desktop/grid_presentation/"`
 	ListeningAddress string `id:"listening_address" default:"0.0.0.0"`
 	ListeningPort    string `id:"listening_port" default:"8110"`
 	Secret           string `id:"secret" default:"grip-..."`

@@ -15,7 +15,7 @@ type Config struct {
 	Secret           string `id:"secret" default:"grip-..."`
 	SrslteConfigDir  string `id:"srslte_config_dir" default:"~/.config/srslte/"`
 	ServerAddress    string `id:"server_address" default:"https://grip.mzz.pub:8110"`
-	AssetDir         string `id:"asset_dir" default:"/var/www/grip_imgs"`
+	AssetDir         string `id:"asset_dir" default:"/home/talented/Desktop/grid_presentation/"`
 }
 
 var config Config

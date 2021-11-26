@@ -15,8 +15,8 @@ var db *gorm.DB
 
 func initDB() {
 	conf := config.Get()
-	args := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?parseTime=true",
+	var args = fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local",
 		conf.DBUsername, conf.DBPassword, conf.DBHost, conf.DBPort, conf.DBDatabase,
 	)
 	var err error
