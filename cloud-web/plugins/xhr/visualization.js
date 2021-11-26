@@ -27,6 +27,18 @@ export default function({ $axios }) {
       method: 'get'
     })
   }
+  function getTypeCounts() {
+    return pack({
+      url: apiRoot + `/visualization/typeCounts`,
+      method: 'get'
+    })
+  }
 
-  return { getLocations, getPowerCounts, getCompanyDevices, getMarks }
+  return {
+    getLocations,
+    getPowerCounts,
+    getCompanyDevices,
+    getMarks,
+    getTypeCounts
+  }
 }

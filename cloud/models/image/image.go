@@ -19,6 +19,7 @@ type Image struct {
 	Mark     *string `gorm:"null" json:"Mark,omitempty"`
 	Annotate *string `gorm:"null" json:"Annotate,omitempty"`
 	Filename string  `gorm:"not null;unique"`
+	Type     string  `gorm:"default:'';not null"`
 }
 
 func GetByID(id int) (img Image, err error) {
@@ -31,12 +32,12 @@ func GetByFilename(fname string) (img Image, err error) {
 	return
 }
 
-func GetByTowerIDAfter(towerID int, after int, limit int, beginTime, endTime time.Time) (imgs []Image, err error) {
+func GetByTowerIDAfter(towerID int, after int, limit int, beginTime, endTime time.Time, typ string) (imgs []Image, err error) {
 	if endTime.IsZero() {
 		endTime = time.Now()
 	}
 	db := dao.DB()
-	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id<? and i.created_at>=? and i.created_at<?", towerID, after, beginTime, endTime).Limit(limit).Order("id desc").Rows()
+	rows, err := db.Raw("select i.* from images i,devices d where device_id=d.id and tower_id=? and i.id<? and i.created_at>=? and i.created_at<? and type=?", towerID, after, beginTime, endTime, typ).Limit(limit).Order("id desc").Rows()
 	if err != nil {
 		return
 	}
@@ -77,7 +78,7 @@ func (image Image) FirstNotMarkAfter() (u Image, err error) {
 			db.Commit()
 		}
 	}()
-	err = db.Model(&Image{}).Where("id>? and mark is null", image.ID).First(&u).Error
+	err = db.Model(&Image{}).Where("id>? and mark is null and typ=?", image.ID, image.Type).First(&u).Error
 	if err != nil {
 		return
 	}
@@ -93,7 +94,7 @@ func (image Image) FirstAfter() (u Image, err error) {
 			db.Commit()
 		}
 	}()
-	err = db.Model(&Image{}).Where("id>?", image.ID).First(&u).Error
+	err = db.Model(&Image{}).Where("id>? and typ=?", image.ID, image.Type).First(&u).Error
 	if err != nil {
 		return
 	}
@@ -101,7 +102,7 @@ func (image Image) FirstAfter() (u Image, err error) {
 	return
 }
 func (image Image) FirstBefore() (u Image, err error) {
-	err = dao.DB().Model(&Image{}).Where("id<? and marker=?", image.ID).Order("id DESC").First(&u).Error
+	err = dao.DB().Model(&Image{}).Where("id<? and marker=? and typ=?", image.ID, image.Type).Order("id DESC").First(&u).Error
 	return
 }
 
@@ -114,7 +115,7 @@ func (image Image) Update() (err error) {
 }
 
 func (image Image) ListAfter(num int) (images []*Image) {
-	rows, err := dao.DB().Model(&Image{}).Where("id>?", image.ID).Limit(num).Rows()
+	rows, err := dao.DB().Model(&Image{}).Where("id>? and typ=?", image.ID, image.Type).Limit(num).Rows()
 	if err != nil {
 		return
 	}

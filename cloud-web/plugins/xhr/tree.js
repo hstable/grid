@@ -15,7 +15,14 @@ export default function({ $axios }) {
       method: 'get'
     })
   }
-  function getTreeTowerImages(after, limit, towerID, beginTime, endTime) {
+  function getTreeTowerImages(
+    after,
+    limit,
+    towerID,
+    beginTime,
+    endTime,
+    type = ''
+  ) {
     return pack({
       url: apiRoot + `/tree/tower/${towerID}/images`,
       method: 'get',
@@ -23,7 +30,8 @@ export default function({ $axios }) {
         after,
         limit,
         beginTime,
-        endTime
+        endTime,
+        type
       }
     })
   }

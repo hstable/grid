@@ -18,7 +18,7 @@ export default {
       const map = new AMap.Map('location-container', {
         mapStyle: 'amap://styles/4261c8dec313b784c0933324313428a8666'
       })
-      map.setZoomAndCenter(12, this.location)
+      map.setZoomAndCenter(12, [this.location[1], this.location[0]])
       /* 绘制小地图的各个省份的分界线 */
       AMapUI.loadUI(['geo/DistrictExplorer'], function(DistrictExplorer) {
         // 创建一个实例
@@ -48,7 +48,7 @@ export default {
         const baseStations = data.baseStations.map((x) => {
           const [lng, lat] = x.Location.split(',')
           const m = new AMap.Marker({
-            position: new AMap.LngLat(lng, lat),
+            position: new AMap.LngLat(lat, lng),
             title: '边缘节点: ' + x.Name,
             x,
             icon: '/tower1.png',
@@ -74,7 +74,7 @@ export default {
         const towers = data.towers.map((x) => {
           const [lng, lat] = x.Location.split(',')
           return new AMap.Marker({
-            position: new AMap.LngLat(lng, lat),
+            position: new AMap.LngLat(lat, lng),
             title: x.Name,
             icon: '/tower0.png',
             offset: new AMap.Pixel(-8, -15)
@@ -86,7 +86,7 @@ export default {
         const mapIDBaseStationPosition = {}
         for (const b of data.baseStations) {
           const [lng, lat] = b.Location.split(',')
-          mapIDBaseStationPosition[b.ID] = new AMap.LngLat(lng, lat)
+          mapIDBaseStationPosition[b.ID] = new AMap.LngLat(lat, lng)
         }
         for (const t of data.towers) {
           const [lng, lat] = t.Location.split(',')
@@ -94,7 +94,7 @@ export default {
             new AMap.Polyline({
               path: [
                 mapIDBaseStationPosition[t.BaseStationID],
-                new AMap.LngLat(lng, lat)
+                new AMap.LngLat(lat, lng)
               ],
               borderWeight: 1, // 线条宽度，默认为 1
               strokeColor: '#4099FF' // 线条颜色
@@ -104,7 +104,7 @@ export default {
         // 创建标记
         map.add(
           new AMap.Marker({
-            position: new AMap.LngLat(...this.location)
+            position: new AMap.LngLat(this.location[1], this.location[0])
           })
         )
       })

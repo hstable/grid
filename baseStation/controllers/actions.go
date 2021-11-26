@@ -64,11 +64,14 @@ func GetNewPhoto(ctx *gin.Context) {
 			err = errors.New("fail in logout")
 		}
 	}()
-	err, b := sdk.CaptureJPEGPictureNew(&hcnetsdk.JPEGParam{
+	// FIXME:
+	// it should be err2 on windows
+	// be err on linux
+	err2, b := sdk.CaptureJPEGPictureNew(&hcnetsdk.JPEGParam{
 		PicSize:    9,
 		PicQuality: 0,
 	})
-	if err != nil {
+	if err2 != false {
 		return
 	}
 	ctx.Status(200)
@@ -77,4 +80,5 @@ func GetNewPhoto(ctx *gin.Context) {
 	ctx.Writer.Write([]byte(mark))
 	ctx.Writer.Write([]byte{0})
 	ctx.Writer.Write(b)
+	
 }

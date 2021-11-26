@@ -72,75 +72,151 @@
             tag="nuxt-link"
             exact-active-class="is-exact"
           ></c-menu-item>
-          <c-menu-item icon="eye" tag="menuitem" :expanded.sync="tree.expanded">
-            <template slot="label" slot-scope="props">
-              通道可视化
-              <b-icon
-                class="is-pulled-right"
-                :icon="props.expanded ? 'menu-down' : 'menu-up'"
-              ></b-icon>
-            </template>
+          <!--          <c-menu-item icon="eye" tag="menuitem" :expanded.sync="tree.expanded">-->
+          <!--            <template slot="label" slot-scope="props">-->
+          <!--              通道可视化-->
+          <!--              <b-icon-->
+          <!--                class="is-pulled-right"-->
+          <!--                :icon="props.expanded ? 'menu-down' : 'menu-up'"-->
+          <!--              ></b-icon>-->
+          <!--            </template>-->
+          <!--            <c-menu-item-->
+          <!--              v-for="company of tree.root"-->
+          <!--              :key="company.CompanyID"-->
+          <!--              :active.sync="company.active"-->
+          <!--              :expanded.sync="company.expanded"-->
+          <!--              icon="domain"-->
+          <!--              tag="menuitem"-->
+          <!--              :disabled="company._Disabled"-->
+          <!--            >-->
+          <!--              <template slot="label" slot-scope="props">-->
+          <!--                {{ tree.companyMap[company.CompanyID] }}-->
+          <!--                <b-icon-->
+          <!--                  class="is-pulled-right"-->
+          <!--                  :icon="props.expanded ? 'menu-down' : 'menu-up'"-->
+          <!--                ></b-icon>-->
+          <!--              </template>-->
+          <!--              <c-menu-item-->
+          <!--                v-for="power of company.data"-->
+          <!--                :key="power.PowerID"-->
+          <!--                :active.sync="power.active"-->
+          <!--                :expanded.sync="power.expanded"-->
+          <!--                icon="flash"-->
+          <!--                tag="menuitem"-->
+          <!--              >-->
+          <!--                <template slot="label" slot-scope="props">-->
+          <!--                  {{ tree.powerMap[power.PowerID] }}-->
+          <!--                  <b-icon-->
+          <!--                    class="is-pulled-right"-->
+          <!--                    :icon="props.expanded ? 'menu-down' : 'menu-up'"-->
+          <!--                  ></b-icon>-->
+          <!--                </template>-->
+          <!--                <c-menu-item-->
+          <!--                  v-for="line of power.data"-->
+          <!--                  :key="line.ID"-->
+          <!--                  :active.sync="line.active"-->
+          <!--                  :expanded.sync="line.expanded"-->
+          <!--                  icon="transit-connection-variant"-->
+          <!--                  tag="menuitem"-->
+          <!--                >-->
+          <!--                  <template slot="label" slot-scope="props">-->
+          <!--                    {{ line.Name }}-->
+          <!--                    <b-icon-->
+          <!--                      class="is-pulled-right"-->
+          <!--                      :icon="props.expanded ? 'menu-down' : 'menu-up'"-->
+          <!--                    ></b-icon>-->
+          <!--                  </template>-->
+          <!--                  <c-menu-item-->
+          <!--                    v-for="tower of line.data"-->
+          <!--                    :key="tower.ID"-->
+          <!--                    icon="transmission-tower"-->
+          <!--                    :label="tower.Name"-->
+          <!--                    :disabled="tower._Disabled"-->
+          <!--                    tag="nuxt-link"-->
+          <!--                    exact-active-class="is-exact"-->
+          <!--                    :to="`/line/${line.ID}/tower/${tower.ID}`"-->
+          <!--                  >-->
+          <!--                  </c-menu-item>-->
+          <!--                </c-menu-item>-->
+          <!--              </c-menu-item>-->
+          <!--            </c-menu-item>-->
+          <!--          </c-menu-item>-->
+          <template v-for="typ of exhi">
             <c-menu-item
-              v-for="company of tree.root"
-              :key="company.CompanyID"
-              :active.sync="company.active"
-              :expanded.sync="company.expanded"
-              icon="domain"
+              :key="typ[0]"
+              icon="eye"
               tag="menuitem"
-              :disabled="company._Disabled"
+              :expanded.sync="tree.expanded[typ[0]]"
             >
               <template slot="label" slot-scope="props">
-                {{ tree.companyMap[company.CompanyID] }}
+                {{ typ[1] }}
                 <b-icon
                   class="is-pulled-right"
                   :icon="props.expanded ? 'menu-down' : 'menu-up'"
                 ></b-icon>
               </template>
               <c-menu-item
-                v-for="power of company.data"
-                :key="power.PowerID"
-                :active.sync="power.active"
-                :expanded.sync="power.expanded"
-                icon="flash"
+                v-for="company of tree.root"
+                :key="company.CompanyID"
+                :active.sync="company.active[typ[0]]"
+                :expanded.sync="company.expanded[typ[0]]"
+                icon="domain"
                 tag="menuitem"
+                :disabled="company._Disabled"
               >
                 <template slot="label" slot-scope="props">
-                  {{ tree.powerMap[power.PowerID] }}
+                  {{ tree.companyMap[company.CompanyID] }}
                   <b-icon
                     class="is-pulled-right"
                     :icon="props.expanded ? 'menu-down' : 'menu-up'"
                   ></b-icon>
                 </template>
                 <c-menu-item
-                  v-for="line of power.data"
-                  :key="line.ID"
-                  :active.sync="line.active"
-                  :expanded.sync="line.expanded"
-                  icon="transit-connection-variant"
+                  v-for="power of company.data"
+                  :key="power.PowerID"
+                  :active.sync="power.active[typ[0]]"
+                  :expanded.sync="power.expanded[typ[0]]"
+                  icon="flash"
                   tag="menuitem"
                 >
                   <template slot="label" slot-scope="props">
-                    {{ line.Name }}
+                    {{ tree.powerMap[power.PowerID] }}
                     <b-icon
                       class="is-pulled-right"
                       :icon="props.expanded ? 'menu-down' : 'menu-up'"
                     ></b-icon>
                   </template>
                   <c-menu-item
-                    v-for="tower of line.data"
-                    :key="tower.ID"
-                    icon="transmission-tower"
-                    :label="tower.Name"
-                    :disabled="tower._Disabled"
-                    tag="nuxt-link"
-                    exact-active-class="is-exact"
-                    :to="`/line/${line.ID}/tower/${tower.ID}`"
+                    v-for="line of power.data"
+                    :key="line.ID"
+                    :active.sync="line.active[typ[0]]"
+                    :expanded.sync="line.expanded[typ[0]]"
+                    icon="transit-connection-variant"
+                    tag="menuitem"
                   >
+                    <template slot="label" slot-scope="props">
+                      {{ line.Name }}
+                      <b-icon
+                        class="is-pulled-right"
+                        :icon="props.expanded ? 'menu-down' : 'menu-up'"
+                      ></b-icon>
+                    </template>
+                    <c-menu-item
+                      v-for="tower of line.data"
+                      :key="tower.ID"
+                      icon="transmission-tower"
+                      :label="tower.Name"
+                      :disabled="tower._Disabled"
+                      tag="nuxt-link"
+                      exact-active-class="is-exact"
+                      :to="`/line/${line.ID}/tower/${tower.ID}?type=${typ[0]}`"
+                    >
+                    </c-menu-item>
                   </c-menu-item>
                 </c-menu-item>
               </c-menu-item>
             </c-menu-item>
-          </c-menu-item>
+          </template>
           <b-navbar-item @click="handleClickLogMarksRisky">
             <b-icon icon="alert" size="is-small"></b-icon>
             <span>告警清单</span>
@@ -189,7 +265,12 @@ export default {
     return {
       sub: localStorage.sub,
       name: localStorage.name,
-      tree: {}
+      tree: {},
+      exhi: [
+        ['vis', '通道可视化'],
+        ['binocular', '双目测距'],
+        ['dehaze', '去雨去雾']
+      ]
     }
   },
   created() {
@@ -218,8 +299,8 @@ export default {
       }
       f(menu)
     },
-    handleLineActiveChanged(line) {
-      if (line.active) {
+    handleLineActiveChanged(line, type = 'vis') {
+      if (line.active[type]) {
         if (!line.data.length) {
           line.data = [
             {
@@ -246,8 +327,12 @@ export default {
     setupTree() {
       const that = this
       this.tree = {
-        root: [{ CompanyID: -1, _Disabled: true }],
-        companyMap: { '-1': 'loading...' }
+        root: [{ CompanyID: -1, _Disabled: true, expanded: {}, active: {} }],
+        companyMap: { '-1': 'loading...' },
+        expanded: {}
+      }
+      for (const e of this.exhi) {
+        this.tree.expanded[e[0]] = false
       }
       this.$xhr
         .getTreeLines()
@@ -268,13 +353,18 @@ export default {
           })
           // 建立第一层tree并按CompanyID递增排序
           for (const cid in companyMap) {
-            tree.push({
+            const obj = {
               CompanyID: parseInt(cid),
               data: [],
               ID2Index: {},
-              expanded: false,
-              active: false
-            })
+              expanded: {},
+              active: {}
+            }
+            for (const e of that.exhi) {
+              obj.expanded[e[0]] = false
+              obj.active[e[0]] = false
+            }
+            tree.push(obj)
           }
           tree.sort((a, b) => {
             if (a.CompanyID < b.CompanyID) {
@@ -315,8 +405,12 @@ export default {
                   [sortKeyword]: x[sortKeyword],
                   data: [],
                   ID2Index: {},
-                  expanded: false,
-                  active: false
+                  expanded: {},
+                  active: {}
+                }
+                for (const e of that.exhi) {
+                  obj.expanded[e[0]] = false
+                  obj.active[e[0]] = false
                 }
                 for (const p of reservedProperties) {
                   obj[p] = x[p]
@@ -340,6 +434,7 @@ export default {
           }
 
           setupTreeLayer(data, tree, 'PowerID', ID2Index, 'CompanyID')
+
           tree.forEach((c) => {
             setupTreeLayer(
               data.filter((d) => d.CompanyID === c.CompanyID),
@@ -352,18 +447,20 @@ export default {
             c.data.forEach((power) => {
               power.data.forEach((line) => {
                 let active = false
-                Object.defineProperty(line, 'active', {
-                  enumerable: true,
-                  configurable: true,
-                  set(newValue) {
-                    active = newValue
-                    that.handleLineActiveChanged(line)
-                    return active
-                  },
-                  get() {
-                    return active
-                  }
-                })
+                for (const e of that.exhi) {
+                  Object.defineProperty(line.active, e[0], {
+                    enumerable: true,
+                    configurable: true,
+                    set(newValue) {
+                      active = newValue
+                      that.handleLineActiveChanged(line, e[0])
+                      return active
+                    },
+                    get() {
+                      return active
+                    }
+                  })
+                }
               })
             })
           })
@@ -371,20 +468,31 @@ export default {
             root: tree,
             companyMap,
             powerMap,
-            expanded: false
+            expanded: {}
+          }
+          for (const e of that.exhi) {
+            this.tree.expanded[e[0]] = false
           }
           this.expandMenu()
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('!!!', e)
           this.tree = {
-            root: [{ CompanyID: -1, _Disabled: true }],
-            companyMap: { '-1': '加载失败' }
+            root: [
+              { CompanyID: -1, _Disabled: true, expanded: {}, active: {} }
+            ],
+            companyMap: { '-1': '加载失败' },
+            expanded: {}
+          }
+          for (const e of this.exhi) {
+            this.tree.expanded[e[0]] = false
           }
         })
     },
     expandMenu() {
       // eslint-disable-next-line no-unused-vars
       let { lineID } = this.$route.params
+      const { type } = this.$route.query
       if (!lineID) {
         return
       }
@@ -397,28 +505,28 @@ export default {
               if (
                 power.data.some((line) => {
                   if (line.ID === lineID) {
-                    line.expanded = true
-                    line.active = true
+                    line.expanded[type] = true
+                    line.active[type] = true
                     return true
                   }
                   return false
                 })
               ) {
-                power.expanded = true
-                power.active = true
+                power.expanded[type] = true
+                power.active[type] = true
                 return true
               }
               return false
             })
           ) {
-            com.expanded = true
-            com.active = true
+            com.expanded[type] = true
+            com.active[type] = true
             return true
           }
           return false
         })
       ) {
-        tree.expanded = true
+        tree.expanded[type] = true
       }
     },
     handleClickLogout() {
